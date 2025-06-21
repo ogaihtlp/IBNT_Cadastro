@@ -1,5 +1,125 @@
-Nome,Nascimento,Sexo,Estado Civil,Rua,Número,Bairro,Data do Batismo,Batismo em Outra Igreja,Nome da Igreja,Dependentes,É Dependente,ID Responsável
-Thiago Lopes Eduardo,2000-03-27,Masculino,Solteiro(a),Rua São Vicente ,462,Manga da Roda,2016-03-12,Sim,Igreja Pentecostal Deus é Amor,[],Não,
-Pessoa teste,2025-06-10,Masculino,Divorciado(a),Rua São Vicente n,462,asdas,2025-06-10,Sim,asdas,"[{""tipo"": ""simples"", ""Nome"": ""asdasd"", ""Nascimento"": ""2025-05-15"", ""Batizado"": ""Sim""}]",Não,
-FICTICIA DA SILVA,2000-02-22,Masculino,Casado(a),RUA,NÚMERO,BAIRRO,2000-02-22,Não,,"[{""tipo"": ""membro"", ""Nome"": ""Thiago Lopes Eduardo"", ""ID_Membro"": 3}, {""tipo"": ""simples"", ""Nome"": ""SADASD"", ""Nascimento"": ""2025-07-10"", ""Batizado"": ""N\u00e3o""}]",Não,
-Thiago Lopes Eduardo,2025-06-12,Masculino,Solteiro(a),Rua São Vicente n,462,,2025-06-12,Não,,[],Sim,2.0
+Nome,Nascimento,Sexo,Estado Civil,Rua,Número,Bairro,Situação,Observações,Data de Cadastro,Dependentes,É Dependente,ID Responsável
+Janaina Meira Teodoro,1991-03-07,Feminino,Solteiro(a),Travessa João Cordeiro ,10,Centro,Visitante,"Já é Cristã. Ver qual igreja.
+Motivos de Oração: Adaptação na cidade, acalmar o coração confiando no Senhor, pela filha de 17 anos que consiga estudar, trabalhar ,congregar.
+Ver se é Casada?
+Não marcou para visita.
+Telefone: 38997422582",2025-03-23,[],Não,
+Arlete Gonçalves de Macedo,1984-08-05,Feminino,Solteiro(a),Rua Bambui,264,Vila Nova,Visitante,"Contato: 38991050618
+",2025-03-23,[],Não,
+Hirlei Carla Alves Barroso,1992-12-22,Feminino,Casado(a),Rua Ceará,Campo,Campo,Visitante,"Contato: 38998601996
+Quer receber Jesus
+Quer estudar a Bíblia
+Quer uma visita do Pastor
+Oração: Pela Vida Financeira, sentimental e espiritual
+Ver dados Marido e outros filhos",2025-03-23,[],Não,
+Eugênia Cordeiro Pereira Rocha,1994-01-03,Feminino,Solteiro(a),Rua Mendonça,215,Cruzeiro Azul,Novo Convertido,"Frequente 
+Contato: (38)991688958",2025-04-03,[],Não,
+Vânia Dias de Oliveira,1980-07-01,Feminino,Solteiro(a),Sebastião de Quadros,sn,Caxambu,Visitante,"Deseja congregar nessa igreja e pede oração pelos filhos:
+Lucas: morando e trabalhando na Inglaterra
+Leandro de 5 anos com quadro depressivo
+Telefone:(38)991466932",2025-05-14,[],Não,
+Kellen Katia Rodrigues,2002-10-07,Feminino,Solteiro(a),Rua Jequitibá,208,Nova Turmalina,Visitante,"É cristão, não é membro de nenhuma igreja.
+Quer apenas conhecer essa igreja; Quer receber uma visita; Quer oração
+Motivo: Passa por batalhas espirituais, está buscando pela mãe, que enfrenta a anos a libertação.
+Telefone: 038)99814.0172",2025-05-14,[],Não,
+Brenda Gonçalves da Cruz,1993-08-21,Feminino,Casado(a),Rua Imbiruçu,488A,Nova Turmalina,Visitante,"Telefone: (38)99174.9741
+É cristão e não congrega em nenhuma igreja.
+Está afastada
+Deseja congregar nesta igreja, Quer oração
+Se reconciliou com Jesus no culto de Domingo, dia 18/05/25",2025-05-22,[],Não,
+Cláudio Cordeiro de Oliveira,1965-01-07,Masculino,Casado(a),"Rua Ricardo Orsine, 110",110,Caxambu,Visitante,"Quer apenas conhecer a igreja
+Telefone: (38)99836.0093",2025-05-22,[],Não,
+Josias Gonçalves Santos,1976-11-07,Masculino,Solteiro(a),Rua Mangabeira,856,Nova Turmalina,Visitante,"Telefone (38)99746.0985
+",2025-05-22,[],Não,
+Evandro Celso dos Santos,1980-08-24,Masculino,Solteiro(a),Rua Bonifácio Cordeiro de Oliveira,sn,Campo,Visitante,"É cristão, mas não é membro de nenhuma igreja
+Veio conhecer a igreja
+Telefone: (31)888006.9789
+",2025-05-22,[],Não,
+Fernanda Alves de Castro,1983-06-17,Feminino,Solteiro(a),Rua Bonifácio Cordeiro de Oliveira,sn,Campo,Visitante,"É cristâ
+Não é membro de igreja
+Deseja apenas conhecer a igreja
+Telefone: (31)99284.4073",2025-05-22,[],Não,
+Mário Gonçalves Siqueira,1954-12-24,Feminino,Solteiro(a),Rua Geraldo Rocha,78,Pau Dóleo,Visitante,"É Cristão
+Membro da igreja Deus é amor
+Quer conhecer a nossa igreja
+Telefone (31/99284.4073
+",2025-05-22,[],Não,
+Izabel Souza Santos,1989-09-19,Feminino,Casado(a),Santa Bárbara,640,Nova Turmalina,Visitante,"- Cristão
+- Não é membro de nenhuma igreja
+- Quer apenas conhecer essa igreja
+- Quer oração pela sua família
+- Telefone: 3398758.9312",2025-06-13,[],Não,
+Núbia Rodrigues Santos Silva,1996-08-12,Feminino,Casado(a),Rua 4E,149,Icaivera - Contagem - MG,Visitante,"- Cristão
+- Membro da Igreja Pentecostal do Verdadeiro Amor
+- Quer oração
+- (31)99626.1786
+Mora em Contagem MG",2025-06-13,[],Não,
+José Maria Gomes Silva,1989-01-14,Masculino,Casado(a),Rua 4E,149,Icaivera - Contagem MG,Visitante,"- É cristão
+- Igreja Pentecostal Verdadeiro Amor de Betim-MG
+- Quer oração pela vida espiritual e pela família
+- (31)99908.4266",2025-06-13,[],Não,
+Yasmin Rodrigues,2008-04-16,Feminino,Solteiro(a),Rua Placedina Pinheiro,45,Manga da Roda,Visitante,"- se considera cristão
+- frequenta somente a IBNT há algum tempo
+- quer congregar nessa igreja
+Fone: (38)99874.7259",2025-06-13,[],Não,
+Maria do Carmo Gomes da Costa,1961-10-28,Feminino,Casado(a),Avenida Pau Brasil,404,Nova Turmalina,Visitante,"- Não é cristão
+- Não é membro de igreja
+- Quer oração
+- Fone: (38)99155.3057",2025-06-13,[],Não,
+Marlene Ferreira Lima,1972-02-09,Feminino,Casado(a),RUA do Rosário,346,Rosário,Visitante,"- Não cristão
+- Visita constantemente essa igreja
+- Quer estudar a bíblia para conhecer melhor a palavra de Jesus
+_ (38)99143.3502",2025-06-13,[],Não,
+Francys Talys Santos Cordeiro,1989-03-30,Feminino,Casado(a),Rua Monte Belo,308,Vila Nova,Visitante,"- Cristão
+- Não é membro de nenhuma igreja
+- Deseja congregar nessa igreja
+- (38)99976.2232",2025-06-13,[],Não,
+Laís Daiana de Bastos Cordeiro,1995-05-01,Feminino,Casado(a),Rua Monte Alto,308,Vila Nova,Visitante,"- Cristão
+- Quer congregar nessa igreja
+- (31) 97512.6795",2025-06-13,[],Não,
+Helenice Maria Barral F. MAchado,1973-02-14,Feminino,Casado(a),Rua Minas Novas,173,Rosário - Turmalina,Novo Convertido,"- Cristão - aceitou Jesus nessa igreja
+- Deseja congregar nessa igreja
+- quer estudar a bíblia - Quer receber visita
+- quer oração 
+- Já se sente membro dessa igreja    Fones: (38)99166.8764",2025-06-13,[],Não,
+Ediane,1993-04-02,Feminino,Casado(a),Rua Imbiruçu,903,Nova Turmalina,Visitante,"- Cristão  (frequentava igreja Batista de Minas Novas)
+- Quer congregar nessa igreja
+- (38)99844.6173
+Casada com Alexandre",2025-06-13,[],Não,
+Alexandre Soares,1994-06-07,Masculino,Casado(a),Rua Imbiruçu,903,Nova Turmalina,Visitante,"- Cristão (frequentava a igreja Batista de Minas Novas
+- quer congregar nessa igreja
+- (38)99844.6173
+- Casado com Ediane",2025-06-13,[],Não,
+João Júlio de Souza Neto,1984-03-21,Masculino,Solteiro(a),Hotel Cristal avenida lauro Machado,Praça,Centro,Visitante,"- É cristão, membro da Igreja Presbiteriana do Brasil
+- Deseja congregar nesta igreja
+- É frequente em nossos cultos, mora no Hotel e trabalha na loja de móveis Nosso Lar
+- (34)99149.8014",2025-06-19,[],Não,
+Eduardo de Lima Cesáreo,1989-01-05,Masculino,Solteiro(a),Zona Rural,s.n,Zona Rural,Visitante,"-Não é membro de nenhuma igreja
+- Deseja oração por toda sua família
+- (38)99867.4801",2025-06-19,[],Não,
+Daniela Antunes de Morais,1999-01-27,Feminino,Solteiro(a),Rua Belo Horizonte,527,Manga da Roda,Visitante,"-Cristão
+-Membro da igreja Ávida em Sete Lagoas e quando está em Turmalina na IBNT
+- Quer congregar nessa igreja
+- (38)991828747",2025-06-19,[],Não,
+Cláudia Aparecida Gomes da Costa,1978-11-22,Feminino,Solteiro(a),Avenida Amazonas,693,São João Batista,Visitante,"- É católica, não praticante
+- Quer estudas a bíblia
+- quer receber uma visita
+- quer oração: pela saúde a família. Mãe: Maria Gomes Costa (Dona Lia)
+ e pela filha: Maria Rita Gomes Barroso - Telefone:(38)99137.5176",2025-06-19,[],Não,
+Ana Júlia sw S. Cordeiro,1991-09-15,Feminino,Solteiro(a),Zona Rural,s.n,Zona Rural,Visitante,"- É cristão mas não é membro de igreja
+- quer congregar nessa igreja
+- quer estudar a bíblia
+- quer oração pela sua conversão e do seu companheiro e pelo casamento deles
+- (38)99849.5846",2025-06-19,[],Não,
+Alessandra Ferreira Gomes,2002-05-03,Feminino,Casado(a),Rua Jatobá,169,Nova Turmalina,Visitante,"- Cristã e católica
+- quer estudar a bíblia, pois já lê a biblia frequentemente mas busca por mais entendimento.
+- (38)99270.8611",2025-06-19,[],Não,
+Adelina Ferreira Gomes,1993-09-14,Feminino,Divorciado(a),Rua José Barbosa,557,Saudade,Visitante,"- É cristão e quer congregar nessa igreja para se aproximar de Cristo
+",2025-06-19,[],Não,
+Maria Alice Z. Gomes,2002-05-03,Feminino,Casado(a),Rua Mangabeira,1034,Nova Turmalina,Visitante,"- É cristão
+- quer congregar nessa igreja para conhecer cada vez mais sobre o nosso salvador.
+- (38)99214.7927",2025-06-19,[],Não,
+Jamila Gomes Pereira,1988-12-23,Feminino,Solteiro(a),Rua Roraima,109B,São Joao Batista,Visitante,"- É cristão
+- Não é membro de igreja
+- Quer congregar nessa igreja
+-(38)99966.9374",2025-06-19,[],Não,

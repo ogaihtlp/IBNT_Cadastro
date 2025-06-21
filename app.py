@@ -58,6 +58,64 @@ def migrar_dados_existentes():
             df['ID Responsável'] = ''
         df.to_csv(PESSOAS_FILE, index=False)
 
+def corrigir_dependentes_membros():
+    """NOVA FUNÇÃO: Corrige registros de dependentes-membros que foram salvos incorretamente"""
+    df_membros = pd.read_csv(MEMBERS_FILE)
+    
+    for index, membro in df_membros.iterrows():
+        if isinstance(membro['Dependentes'], str) and membro['Dependentes'].strip():
+            try:
+                dependentes = json.loads(membro['Dependentes'])
+                dependentes_atualizados = []
+                
+                for dep in dependentes:
+                    # Procurar dependentes que deveriam ser membros mas estão como simples
+                    if dep.get('tipo', 'simples') == 'simples':
+                        # Verificar se existe um membro com o mesmo nome que deveria ser dependente-membro
+                        nome_dep = dep.get('Nome', '')
+                        nascimento_dep = dep.get('Nascimento', '')
+                        
+                        # Procurar membro correspondente
+                        membro_correspondente = df_membros[
+                            (df_membros['Nome'] == nome_dep) & 
+                            (df_membros['Nascimento'] == nascimento_dep) &
+                            (df_membros.index != index)  # Não incluir o próprio membro
+                        ]
+                        
+                        if not membro_correspondente.empty:
+                            # Encontrou membro correspondente - atualizar para dependente-membro
+                            id_membro = membro_correspondente.index[0]
+                            
+                            # Atualizar o membro para ser dependente
+                            df_membros.at[id_membro, 'É Dependente'] = 'Sim'
+                            df_membros.at[id_membro, 'ID Responsável'] = str(index)
+                            
+                            # Atualizar na lista de dependentes
+                            dep_atualizado = {
+                                "tipo": "membro",
+                                "Nome": nome_dep,
+                                "ID_Membro": id_membro
+                            }
+                            dependentes_atualizados.append(dep_atualizado)
+                            print(f"Corrigido: {nome_dep} agora é dependente-membro de {membro['Nome']}")
+                        else:
+                            # Manter como dependente simples
+                            dependentes_atualizados.append(dep)
+                    else:
+                        # Já é dependente-membro, manter
+                        dependentes_atualizados.append(dep)
+                
+                # Atualizar a lista de dependentes do membro responsável
+                df_membros.at[index, 'Dependentes'] = json.dumps(dependentes_atualizados)
+                
+            except Exception as e:
+                print(f"Erro ao processar dependentes do membro {membro['Nome']}: {e}")
+                continue
+    
+    # Salvar as correções
+    df_membros.to_csv(MEMBERS_FILE, index=False)
+    print("Correção de dependentes-membros concluída")
+
 def calcular_idade(data_nascimento):
     """Calcula a idade com base na data de nascimento"""
     if not data_nascimento:
@@ -140,7 +198,7 @@ def criar_usuario(usuario, senha):
     return True
 
 def cadastrar_dependente_como_membro(dados_dependente, id_responsavel):
-    """Cadastra um dependente como membro completo"""
+    """CORRIGIDO: Cadastra um dependente como membro completo"""
     df_membros = pd.read_csv(MEMBERS_FILE)
     
     novo_membro = pd.DataFrame([[
@@ -165,6 +223,50 @@ def cadastrar_dependente_como_membro(dados_dependente, id_responsavel):
     df_membros.to_csv(MEMBERS_FILE, index=False)
     
     return len(df_membros) - 1  # Retorna o índice do novo membro
+
+def alterar_dependente_para_membro(id_responsavel, nome_dependente, dados_completos):
+    """NOVA FUNÇÃO: Converte um dependente simples em dependente-membro"""
+    df_membros = pd.read_csv(MEMBERS_FILE)
+    
+    # Encontrar o membro responsável
+    if id_responsavel >= len(df_membros):
+        return False, "Membro responsável não encontrado"
+    
+    membro_responsavel = df_membros.iloc[id_responsavel]
+    dependentes = []
+    
+    if isinstance(membro_responsavel['Dependentes'], str) and membro_responsavel['Dependentes'].strip():
+        try:
+            dependentes = json.loads(membro_responsavel['Dependentes'])
+        except:
+            return False, "Erro ao processar dependentes"
+    
+    # Encontrar o dependente específico
+    dependente_encontrado = None
+    for i, dep in enumerate(dependentes):
+        if dep.get('Nome') == nome_dependente and dep.get('tipo', 'simples') == 'simples':
+            dependente_encontrado = i
+            break
+    
+    if dependente_encontrado is None:
+        return False, "Dependente não encontrado ou já é membro"
+    
+    # Criar o novo membro
+    id_novo_membro = cadastrar_dependente_como_membro(dados_completos, id_responsavel)
+    
+    # Atualizar a lista de dependentes do responsável
+    dependentes[dependente_encontrado] = {
+        "tipo": "membro",
+        "Nome": nome_dependente,
+        "ID_Membro": id_novo_membro
+    }
+    
+    # Salvar as alterações
+    df_membros = pd.read_csv(MEMBERS_FILE)  # Recarregar após inserção
+    df_membros.at[id_responsavel, 'Dependentes'] = json.dumps(dependentes)
+    df_membros.to_csv(MEMBERS_FILE, index=False)
+    
+    return True, f"Dependente {nome_dependente} convertido para membro com sucesso"
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -243,7 +345,7 @@ def dashboard():
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
-    """Página de cadastro de membros"""
+    """CORRIGIDO: Página de cadastro de membros"""
     if 'usuario' not in session:
         flash('Você precisa fazer login para acessar o cadastro.', 'error')
         return redirect(url_for('login'))
@@ -268,38 +370,7 @@ def cadastro():
         dep_nomes = request.form.getlist('dep_nome')
         dep_tipos = request.form.getlist('dep_tipo')
         
-        if dep_nomes:
-            for i in range(len(dep_nomes)):
-                if dep_nomes[i]:  # Verifica se o nome não está vazio
-                    tipo_dep = dep_tipos[i] if i < len(dep_tipos) else 'simples'
-                    
-                    if tipo_dep == 'simples':
-                        # Dependente simples (formato antigo)
-                        dependente = {
-                            "tipo": "simples",
-                            "Nome": dep_nomes[i],
-                            "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
-                            "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
-                        }
-                    else:
-                        # Dependente completo - será cadastrado como membro
-                        dependente = {
-                            "tipo": "membro",
-                            "Nome": dep_nomes[i],
-                            "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
-                            "Sexo": request.form.getlist('dep_sexo')[i] if i < len(request.form.getlist('dep_sexo')) else "",
-                            "Estado Civil": request.form.getlist('dep_estado_civil')[i] if i < len(request.form.getlist('dep_estado_civil')) else "",
-                            "Rua": request.form.getlist('dep_rua')[i] if i < len(request.form.getlist('dep_rua')) else rua,
-                            "Numero": request.form.getlist('dep_numero')[i] if i < len(request.form.getlist('dep_numero')) else numero,
-                            "Bairro": request.form.getlist('dep_bairro')[i] if i < len(request.form.getlist('dep_bairro')) else bairro,
-                            "Data do Batismo": request.form.getlist('dep_data_batismo')[i] if i < len(request.form.getlist('dep_data_batismo')) else "",
-                            "Batismo em Outra Igreja": request.form.getlist('dep_batismo_outra_igreja')[i] if i < len(request.form.getlist('dep_batismo_outra_igreja')) else "Não",
-                            "Nome da Igreja": request.form.getlist('dep_nome_igreja')[i] if i < len(request.form.getlist('dep_nome_igreja')) else ""
-                        }
-                    
-                    dependentes.append(dependente)
-        
-        # Salva o membro principal
+        # Primeiro, salva o membro principal para obter seu ID
         df = pd.read_csv(MEMBERS_FILE)
         novo_membro = pd.DataFrame([[nome, nascimento, sexo, estado_civil, rua, numero, bairro, 
                                      data_batismo, batismo_outra_igreja, nome_igreja, json.dumps([]),
@@ -313,40 +384,52 @@ def cadastro():
         # ID do membro principal (último inserido)
         id_responsavel = len(df) - 1
         
-        # Processa dependentes e cadastra os membros completos
-        dependentes_finais = []
-        for dep in dependentes:
-            if dep['tipo'] == 'membro':
-                # Cadastra como membro completo
-                dados_dep = {
-                    'nome': dep['Nome'],
-                    'nascimento': dep['Nascimento'],
-                    'sexo': dep['Sexo'],
-                    'estado_civil': dep['Estado Civil'],
-                    'rua': dep['Rua'],
-                    'numero': dep['Numero'],
-                    'bairro': dep['Bairro'],
-                    'data_batismo': dep['Data do Batismo'],
-                    'batismo_outra_igreja': dep['Batismo em Outra Igreja'],
-                    'nome_igreja': dep['Nome da Igreja']
-                }
-                
-                id_dep = cadastrar_dependente_como_membro(dados_dep, id_responsavel)
-                
-                # Adiciona referência ao dependente membro
-                dependentes_finais.append({
-                    "tipo": "membro",
-                    "Nome": dep['Nome'],
-                    "ID_Membro": id_dep
-                })
-            else:
-                # Mantém como dependente simples
-                dependentes_finais.append(dep)
-        
-        # Atualiza o membro principal com os dependentes
-        df = pd.read_csv(MEMBERS_FILE)
-        df.at[id_responsavel, 'Dependentes'] = json.dumps(dependentes_finais)
-        df.to_csv(MEMBERS_FILE, index=False)
+        # Processa dependentes
+        if dep_nomes:
+            dependentes_finais = []
+            
+            for i in range(len(dep_nomes)):
+                if dep_nomes[i]:  # Verifica se o nome não está vazio
+                    tipo_dep = dep_tipos[i] if i < len(dep_tipos) else 'simples'
+                    
+                    if tipo_dep == 'membro':
+                        # Dependente completo - será cadastrado como membro
+                        dados_dep = {
+                            'nome': dep_nomes[i],
+                            'nascimento': request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
+                            'sexo': request.form.getlist('dep_sexo')[i] if i < len(request.form.getlist('dep_sexo')) else "",
+                            'estado_civil': request.form.getlist('dep_estado_civil')[i] if i < len(request.form.getlist('dep_estado_civil')) else "",
+                            'rua': request.form.getlist('dep_rua')[i] if i < len(request.form.getlist('dep_rua')) else rua,
+                            'numero': request.form.getlist('dep_numero')[i] if i < len(request.form.getlist('dep_numero')) else numero,
+                            'bairro': request.form.getlist('dep_bairro')[i] if i < len(request.form.getlist('dep_bairro')) else bairro,
+                            'data_batismo': request.form.getlist('dep_data_batismo')[i] if i < len(request.form.getlist('dep_data_batismo')) else "",
+                            'batismo_outra_igreja': request.form.getlist('dep_batismo_outra_igreja')[i] if i < len(request.form.getlist('dep_batismo_outra_igreja')) else "Não",
+                            'nome_igreja': request.form.getlist('dep_nome_igreja')[i] if i < len(request.form.getlist('dep_nome_igreja')) else ""
+                        }
+                        
+                        # Cadastra como membro completo
+                        id_dep = cadastrar_dependente_como_membro(dados_dep, id_responsavel)
+                        
+                        # Adiciona referência ao dependente membro
+                        dependentes_finais.append({
+                            "tipo": "membro",
+                            "Nome": dep_nomes[i],
+                            "ID_Membro": id_dep
+                        })
+                    else:
+                        # Dependente simples
+                        dependente = {
+                            "tipo": "simples",
+                            "Nome": dep_nomes[i],
+                            "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
+                            "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
+                        }
+                        dependentes_finais.append(dependente)
+            
+            # Atualiza o membro principal com os dependentes
+            df = pd.read_csv(MEMBERS_FILE)
+            df.at[id_responsavel, 'Dependentes'] = json.dumps(dependentes_finais)
+            df.to_csv(MEMBERS_FILE, index=False)
         
         flash('Membro cadastrado com sucesso!', 'success')
         return redirect(url_for('dashboard'))
@@ -382,6 +465,92 @@ def gerenciar_usuario():
         return redirect(url_for('gerenciar_usuario'))
     
     return render_template('usuario.html', usuarios=usuarios)
+
+@app.route('/corrigir-dependentes')
+def corrigir_dependentes():
+    """NOVA ROTA: Rota para executar correção de dependentes-membros"""
+    if 'usuario' not in session:
+        flash('Você precisa fazer login.', 'error')
+        return redirect(url_for('login'))
+    
+    if session['usuario'] != 'admin':
+        flash('Apenas o administrador pode executar correções.', 'error')
+        return redirect(url_for('dashboard'))
+    
+    try:
+        corrigir_dependentes_membros()
+        flash('Correção de dependentes-membros executada com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro na correção: {str(e)}', 'error')
+    
+    return redirect(url_for('dashboard'))
+
+@app.route('/promover-dependente/<int:id_responsavel>/<nome_dependente>', methods=['GET', 'POST'])
+def promover_dependente(id_responsavel, nome_dependente):
+    """NOVA ROTA: Promove um dependente simples para dependente-membro"""
+    if 'usuario' not in session:
+        flash('Você precisa fazer login.', 'error')
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        try:
+            # Verificar se todos os campos obrigatórios estão presentes
+            campos_obrigatorios = ['nascimento', 'sexo', 'estado_civil', 'rua', 'numero', 'bairro']
+            for campo in campos_obrigatorios:
+                if not request.form.get(campo):
+                    flash(f'O campo {campo} é obrigatório.', 'error')
+                    return redirect(request.url)
+            
+            # Coleta dados do formulário
+            dados_completos = {
+                'nome': nome_dependente,
+                'nascimento': request.form['nascimento'],
+                'sexo': request.form['sexo'],
+                'estado_civil': request.form['estado_civil'],
+                'rua': request.form['rua'],
+                'numero': request.form['numero'],
+                'bairro': request.form['bairro'],
+                'data_batismo': request.form.get('data_batismo', ''),
+                'batismo_outra_igreja': request.form.get('batismo_outra_igreja', 'Não'),
+                'nome_igreja': request.form.get('nome_igreja', '')
+            }
+            
+            sucesso, mensagem = alterar_dependente_para_membro(id_responsavel, nome_dependente, dados_completos)
+            
+            if sucesso:
+                flash(mensagem, 'success')
+                return redirect(url_for('visualizar_membro', indice=id_responsavel))
+            else:
+                flash(mensagem, 'error')
+                
+        except Exception as e:
+            flash(f'Erro ao processar formulário: {str(e)}', 'error')
+    
+    # Carregar dados do responsável para pré-preencher endereço
+    df_membros = pd.read_csv(MEMBERS_FILE)
+    if id_responsavel < len(df_membros):
+        responsavel = df_membros.iloc[id_responsavel].to_dict()
+        
+        # Buscar dados do dependente se já existirem
+        dependente_dados = None
+        if isinstance(responsavel['Dependentes'], str) and responsavel['Dependentes'].strip():
+            try:
+                deps = json.loads(responsavel['Dependentes'])
+                for dep in deps:
+                    if dep.get('Nome') == nome_dependente and dep.get('tipo', 'simples') == 'simples':
+                        dependente_dados = dep
+                        break
+            except:
+                pass
+        
+        return render_template('promover_dependente.html', 
+                             responsavel=responsavel, 
+                             nome_dependente=nome_dependente,
+                             id_responsavel=id_responsavel,
+                             dependente_dados=dependente_dados)
+    else:
+        flash('Membro responsável não encontrado.', 'error')
+        return redirect(url_for('listar_membros'))
 
 @app.route('/logout')
 def logout():
@@ -483,7 +652,7 @@ def visualizar_membro(indice):
 
 @app.route('/membro/editar/<int:indice>', methods=['GET', 'POST'])
 def editar_membro(indice):
-    """Página para editar um membro"""
+    """CORRIGIDO: Página para editar um membro"""
     if 'usuario' not in session:
         flash('Você precisa fazer login para editar membros.', 'error')
         return redirect(url_for('login'))
@@ -508,18 +677,62 @@ def editar_membro(indice):
         batismo_outra_igreja = request.form.get('batismo_outra_igreja', 'Não')
         nome_igreja = request.form.get('nome_igreja', '')
         
-        # Processa dependentes
-        dependentes = []
+        # Processa dependentes (apenas dependentes simples podem ser editados aqui)
+        dependentes_finais = []
         dep_nomes = request.form.getlist('dep_nome')
+        dep_tipos = request.form.getlist('dep_tipo')
+        
+        # Primeiro, preservar dependentes que são membros
+        membro_atual = df.iloc[indice]
+        if isinstance(membro_atual['Dependentes'], str) and membro_atual['Dependentes'].strip():
+            try:
+                deps_existentes = json.loads(membro_atual['Dependentes'])
+                for dep in deps_existentes:
+                    if isinstance(dep, dict) and dep.get('tipo') == 'membro':
+                        # Preservar dependentes-membros existentes
+                        dependentes_finais.append(dep)
+            except Exception as e:
+                print(f"Erro ao processar dependentes existentes: {e}")
+        
+        # Adicionar novos dependentes simples
         if dep_nomes:
             for i in range(len(dep_nomes)):
                 if dep_nomes[i]:  # Verifica se o nome não está vazio
-                    dependente = {
-                        "Nome": dep_nomes[i],
-                        "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
-                        "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
-                    }
-                    dependentes.append(dependente)
+                    tipo_dep = dep_tipos[i] if i < len(dep_tipos) else 'simples'
+                    
+                    if tipo_dep == 'simples':
+                        dependente = {
+                            "tipo": "simples",
+                            "Nome": dep_nomes[i],
+                            "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
+                            "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
+                        }
+                        dependentes_finais.append(dependente)
+                    elif tipo_dep == 'membro':
+                        # Novo dependente-membro
+                        try:
+                            dados_dep = {
+                                'nome': dep_nomes[i],
+                                'nascimento': request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
+                                'sexo': request.form.getlist('dep_sexo')[i] if i < len(request.form.getlist('dep_sexo')) else "",
+                                'estado_civil': request.form.getlist('dep_estado_civil')[i] if i < len(request.form.getlist('dep_estado_civil')) else "",
+                                'rua': request.form.getlist('dep_rua')[i] if i < len(request.form.getlist('dep_rua')) else rua,
+                                'numero': request.form.getlist('dep_numero')[i] if i < len(request.form.getlist('dep_numero')) else numero,
+                                'bairro': request.form.getlist('dep_bairro')[i] if i < len(request.form.getlist('dep_bairro')) else bairro,
+                                'data_batismo': request.form.getlist('dep_data_batismo')[i] if i < len(request.form.getlist('dep_data_batismo')) else "",
+                                'batismo_outra_igreja': request.form.getlist('dep_batismo_outra_igreja')[i] if i < len(request.form.getlist('dep_batismo_outra_igreja')) else "Não",
+                                'nome_igreja': request.form.getlist('dep_nome_igreja')[i] if i < len(request.form.getlist('dep_nome_igreja')) else ""
+                            }
+                            
+                            id_dep = cadastrar_dependente_como_membro(dados_dep, indice)
+                            
+                            dependentes_finais.append({
+                                "tipo": "membro",
+                                "Nome": dep_nomes[i],
+                                "ID_Membro": id_dep
+                            })
+                        except Exception as e:
+                            flash(f'Erro ao cadastrar dependente-membro {dep_nomes[i]}: {str(e)}', 'error')
         
         # Atualiza o DataFrame
         df.at[indice, 'Nome'] = nome
@@ -532,7 +745,7 @@ def editar_membro(indice):
         df.at[indice, 'Data do Batismo'] = data_batismo
         df.at[indice, 'Batismo em Outra Igreja'] = batismo_outra_igreja
         df.at[indice, 'Nome da Igreja'] = nome_igreja
-        df.at[indice, 'Dependentes'] = json.dumps(dependentes)
+        df.at[indice, 'Dependentes'] = json.dumps(dependentes_finais)
         
         # Salva o DataFrame atualizado
         df.to_csv(MEMBERS_FILE, index=False)
@@ -543,14 +756,72 @@ def editar_membro(indice):
     # Para requisição GET, busca os dados atuais para edição
     membro = df.iloc[indice].to_dict()
     
-    # Converte os dependentes de JSON para lista
-    if isinstance(membro['Dependentes'], str):
+    # Converte os dependentes de JSON para lista, separando simples dos membros
+    dependentes_simples = []
+    dependentes_membros = []
+    
+    if isinstance(membro['Dependentes'], str) and membro['Dependentes'].strip():
         try:
-            membro['Dependentes'] = json.loads(membro['Dependentes'])
+            deps = json.loads(membro['Dependentes'])
+            for dep in deps:
+                if isinstance(dep, dict):  # Verifica se é um dicionário
+                    if dep.get('tipo') == 'membro':
+                        # Buscar dados completos do dependente-membro
+                        id_dep = dep.get('ID_Membro')
+                        if id_dep is not None and id_dep < len(df):
+                            dep_completo = df.iloc[id_dep].to_dict()
+                            dep['DadosCompletos'] = dep_completo
+                        dependentes_membros.append(dep)
+                    else:
+                        dependentes_simples.append(dep)
+                else:
+                    # Formato antigo - converter para novo formato
+                    if isinstance(dep, str):
+                        dep_dict = {
+                            "tipo": "simples",
+                            "Nome": dep,
+                            "Nascimento": "",
+                            "Batizado": "Não"
+                        }
+                        dependentes_simples.append(dep_dict)
+        except Exception as e:
+            print(f"Erro ao processar dependentes para edição: {e}")
+            # Em caso de erro, inicializar listas vazias
+            dependentes_simples = []
+            dependentes_membros = []
+    
+    # Corrigir o nome da variável para compatibilidade com o template
+    membro['Dependentes'] = dependentes_simples
+    membro['DependentesSimples'] = dependentes_simples
+    membro['DependentesMembros'] = dependentes_membros
+    
+    return render_template('editar_membro.html', membro=membro, indice=indice)
+    
+    # Para requisição GET, busca os dados atuais para edição
+    membro = df.iloc[indice].to_dict()
+    
+    # Converte os dependentes de JSON para lista, separando simples dos membros
+    dependentes_simples = []
+    dependentes_membros = []
+    
+    if isinstance(membro['Dependentes'], str) and membro['Dependentes'].strip():
+        try:
+            deps = json.loads(membro['Dependentes'])
+            for dep in deps:
+                if dep.get('tipo') == 'membro':
+                    # Buscar dados completos do dependente-membro
+                    id_dep = dep.get('ID_Membro')
+                    if id_dep is not None and id_dep < len(df):
+                        dep_completo = df.iloc[id_dep].to_dict()
+                        dep['DadosCompletos'] = dep_completo
+                    dependentes_membros.append(dep)
+                else:
+                    dependentes_simples.append(dep)
         except:
-            membro['Dependentes'] = []
-    else:
-        membro['Dependentes'] = []
+            pass
+    
+    membro['DependentesSimples'] = dependentes_simples
+    membro['DependentesMembros'] = dependentes_membros
     
     return render_template('editar_membro.html', membro=membro, indice=indice)
 

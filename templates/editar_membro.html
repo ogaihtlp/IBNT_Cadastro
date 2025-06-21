@@ -311,7 +311,7 @@
                         <strong>Dependente Membro:</strong> Para dependentes que também são membros oficiais da igreja (contabilizados nas estatísticas).
                     </div>
                     
-                    {% if membro.get('DependentesProcessados') %}
+                    {% if membro.get('DependentesMembros') and membro['DependentesMembros']|length > 0 %}
                         <div class="alert alert-warning-membro">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <strong>Atenção:</strong> Este membro possui dependentes que também são membros oficiais. 
@@ -320,53 +320,54 @@
                     {% endif %}
 
                     <div id="dependentes-container">
-                        <!-- Dependentes existentes -->
-                        {% if membro['Dependentes'] and membro['Dependentes']|length > 0 %}
-                            {% for dependente in membro['Dependentes'] %}
-                                {% if dependente.get('tipo') == 'membro' %}
-                                    <!-- Dependente que é membro - só exibição -->
-                                    <div class="dependente-item dependente-existente mb-3 p-3 border rounded">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <h6 class="mb-0">{{ dependente['Nome'] }}</h6>
-                                                <span class="tipo-badge badge-existente">Membro Oficial Existente</span>
-                                            </div>
-                                            <small class="text-muted">Não editável aqui</small>
+                        <!-- Dependentes-membros existentes (apenas exibição) -->
+                        {% if membro.get('DependentesMembros') and membro['DependentesMembros']|length > 0 %}
+                            {% for dependente in membro['DependentesMembros'] %}
+                                <div class="dependente-item dependente-existente mb-3 p-3 border rounded">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">{{ dependente['Nome'] }}</h6>
+                                            <span class="tipo-badge badge-existente">Membro Oficial Existente</span>
                                         </div>
-                                        <p class="mb-0 text-muted">Para editar, acesse o perfil individual deste membro.</p>
+                                        <small class="text-muted">Não editável aqui</small>
                                     </div>
-                                {% else %}
-                                    <!-- Dependente simples - editável -->
-                                    <div class="dependente-item dependente-simples mb-3 p-3 border rounded">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <h6 class="mb-0">Dependente Existente</h6>
-                                                <span class="tipo-badge badge-simples">Dependente Simples</span>
-                                            </div>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.parentNode.parentNode.remove()">
-                                                <i class="fas fa-times me-1"></i> Remover
-                                            </button>
+                                    <p class="mb-0 text-muted">Para editar, acesse o perfil individual deste membro.</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <!-- Dependentes simples existentes (editáveis) -->
+                        {% if membro.get('DependentesSimples') and membro['DependentesSimples']|length > 0 %}
+                            {% for dependente in membro['DependentesSimples'] %}
+                                <div class="dependente-item dependente-simples mb-3 p-3 border rounded">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">Dependente Existente</h6>
+                                            <span class="tipo-badge badge-simples">Dependente Simples</span>
                                         </div>
-                                        <input type="hidden" name="dep_tipo" value="simples">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-2">
-                                                <label class="form-label">Nome do Dependente</label>
-                                                <input type="text" class="form-control" name="dep_nome" value="{{ dependente.get('Nome', '') }}">
-                                            </div>
-                                            <div class="col-md-4 mb-2">
-                                                <label class="form-label">Data de Nascimento</label>
-                                                <input type="date" class="form-control" name="dep_nascimento" value="{{ dependente.get('Nascimento', '') }}">
-                                            </div>
-                                            <div class="col-md-2 mb-2">
-                                                <label class="form-label">Batizado?</label>
-                                                <select class="form-select" name="dep_batizado">
-                                                    <option value="Não" {{ 'selected' if dependente.get('Batizado') == 'Não' else '' }}>Não</option>
-                                                    <option value="Sim" {{ 'selected' if dependente.get('Batizado') == 'Sim' else '' }}>Sim</option>
-                                                </select>
-                                            </div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.parentNode.parentNode.remove()">
+                                            <i class="fas fa-times me-1"></i> Remover
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="dep_tipo" value="simples">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label">Nome do Dependente</label>
+                                            <input type="text" class="form-control" name="dep_nome" value="{{ dependente.get('Nome', '') }}">
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label">Data de Nascimento</label>
+                                            <input type="date" class="form-control" name="dep_nascimento" value="{{ dependente.get('Nascimento', '') }}">
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label">Batizado?</label>
+                                            <select class="form-select" name="dep_batizado">
+                                                <option value="Não" {{ 'selected' if dependente.get('Batizado') == 'Não' else '' }}>Não</option>
+                                                <option value="Sim" {{ 'selected' if dependente.get('Batizado') == 'Sim' else '' }}>Sim</option>
+                                            </select>
                                         </div>
                                     </div>
-                                {% endif %}
+                                </div>
                             {% endfor %}
                         {% endif %}
                     </div>

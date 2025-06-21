@@ -150,6 +150,18 @@
             border-color: #ffeaa7;
             color: #856404;
         }
+        .btn-promover {
+            background-color: #ff9800;
+            border-color: #ff9800;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .btn-promover:hover {
+            background-color: #f57c00;
+            border-color: #f57c00;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -228,6 +240,15 @@
                 </button>
             </div>
         </div>
+
+        <!-- Botão para correção de dependentes-membros (apenas para admin) -->
+        {% if session['usuario'] == 'admin' %}
+        <div class="mb-3">
+            <a href="{{ url_for('corrigir_dependentes') }}" class="btn btn-sm btn-warning">
+                <i class="fas fa-tools me-1"></i>Corrigir Dependentes-Membros
+            </a>
+        </div>
+        {% endif %}
 
         <div class="profile-header">
             <div class="profile-avatar">
@@ -365,7 +386,13 @@
                                 <div class="dependente-item dependente-simples">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <h5>{{ dependente.get('Nome', '') }}</h5>
-                                        <span class="tipo-badge badge-simples">Dependente</span>
+                                        <div>
+                                            <span class="tipo-badge badge-simples me-2">Dependente</span>
+                                            <a href="{{ url_for('promover_dependente', id_responsavel=indice, nome_dependente=dependente.get('Nome', '')) }}" 
+                                               class="btn btn-promover">
+                                                <i class="fas fa-user-check me-1"></i>Promover
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -385,7 +412,13 @@
                             <div class="dependente-item dependente-simples">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <h5>{{ dependente.get('Nome', '') }}</h5>
-                                    <span class="tipo-badge badge-simples">Dependente</span>
+                                    <div>
+                                        <span class="tipo-badge badge-simples me-2">Dependente</span>
+                                        <a href="{{ url_for('promover_dependente', id_responsavel=indice, nome_dependente=dependente.get('Nome', '')) }}" 
+                                           class="btn btn-promover">
+                                            <i class="fas fa-user-check me-1"></i>Promover
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
