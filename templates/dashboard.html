@@ -6,172 +6,448 @@
     <title>Dashboard - Sistema de Gerenciamento da Igreja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-green: #81c784;
-            --light-green: #a5d6a7;
-            --dark-green: #60ad5e;
-            --pale-green: #e8f5e9;
-            --accent-green: #4caf50;
-            --lighter-green: #c8e6c9;
+            --primary-green: #10b981;
+            --primary-green-light: #34d399;
+            --primary-green-dark: #059669;
+            --secondary-blue: #3b82f6;
+            --secondary-purple: #8b5cf6;
+            --secondary-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
         }
+
+        /* Navbar */
         .navbar {
-            background-color: var(--dark-green);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+            border: none;
         }
+
         .navbar-brand {
-            font-weight: 500;
-        }
-        .nav-link {
-            color: rgba(255,255,255,0.85) !important;
-            font-weight: 400;
-            padding: 0.75rem 1rem !important;
-            transition: all 0.2s;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: white !important;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 6px;
-        }
-        .card {
-            border: 1px solid rgba(129, 199, 132, 0.3);
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 1.5rem;
-        }
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-        .stat-card {
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .stat-card i {
-            opacity: 0.8;
-        }
-        .bg-main {
-            background-color: var(--main-green);
-        }
-        .bg-light-green {
-            background-color: var(--light-green);
-        }
-        .bg-dark-green {
-            background-color: var(--dark-green);
-        }
-        .bg-lighter-green {
-            background-color: var(--lighter-green);
-        }
-        .btn-main {
-            background-color: var(--dark-green);
-            border-color: var(--dark-green);
-            color: white;
-        }
-        .btn-main:hover {
-            background-color: var(--main-green);
-            border-color: var(--main-green);
-            color: white;
-        }
-        .btn-outline-main {
-            border-color: var(--dark-green);
-            color: var(--dark-green);
-        }
-        .btn-outline-main:hover {
-            background-color: var(--dark-green);
-            color: white;
-        }
-        .card-header {
-            border-bottom: none;
-            padding: 1.2rem 1.5rem;
-            font-weight: 500;
-        }
-        .actions-header {
-            background-color: var(--pale-green);
-            color: var(--dark-green);
-        }
-        h1, h2, h3, h4, h5, h6 {
-            color: #333;
-        }
-        .page-title {
             font-weight: 600;
-            color: #333;
-            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--white) !important;
         }
-        .card-title-small {
-            font-size: 1rem;
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 500;
-            color: #333;
+            padding: 0.75rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin: 0 0.25rem;
         }
-        .section-title {
-            font-weight: 500;
-            margin-bottom: 1.25rem;
-            color: #333;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
-        .table th {
-            font-weight: 500;
+
+        /* Main Container */
+        .main-container {
+            padding: 2rem 0;
         }
-        .bg-light-section {
-            background-color: rgba(129, 199, 132, 0.1);
-            border: 1px solid rgba(129, 199, 132, 0.2);
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-green-light));
+        }
+
+        .stat-card.blue::before {
+            background: linear-gradient(90deg, var(--secondary-blue), #60a5fa);
+        }
+
+        .stat-card.purple::before {
+            background: linear-gradient(90deg, var(--secondary-purple), #a78bfa);
+        }
+
+        .stat-card.orange::before {
+            background: linear-gradient(90deg, var(--secondary-orange), #fbbf24);
+        }
+
+        .stat-card.pink::before {
+            background: linear-gradient(90deg, var(--accent-pink), #f472b6);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .list-card {
-            background-color: white;
-            border: 1px solid rgba(129, 199, 132, 0.2);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            transition: all 0.2s;
-        }
-        .list-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .badge-visitante {
-            background-color: var(--light-green);
-            color: white;
-        }
-        .badge-convertido {
-            background-color: var(--dark-green);
-            color: white;
-        }
-        .activity-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            font-size: 1.5rem;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, var(--secondary-blue), #60a5fa);
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, var(--secondary-purple), #a78bfa);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, var(--secondary-orange), #fbbf24);
+        }
+
+        .stat-icon.pink {
+            background: linear-gradient(135deg, var(--accent-pink), #f472b6);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive {
+            color: var(--primary-green);
+        }
+
+        .stat-change.neutral {
+            color: var(--gray-500);
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-right: 1rem;
         }
-        .status-icon-membro {
-            background-color: var(--main-green);
+
+        /* Action Cards */
+        .action-card {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
         }
-        .status-icon-visitante {
-            background-color: var(--light-green);
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
-        .status-icon-convertido {
-            background-color: var(--dark-green);
+
+        .action-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+        }
+
+        .action-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.75rem;
+        }
+
+        .action-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            background: transparent;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-green);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        /* Recent Activity */
+        .activity-card {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background: var(--gray-50);
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .activity-item:hover {
+            background: var(--gray-100);
+            transform: translateX(4px);
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-meta {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .activity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-visitante {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .badge-convertido {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--secondary-orange);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem 0;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green-dark);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-church me-2"></i>
-                Sistema de Gerenciamento
+                Cadastro IBNT
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -217,7 +493,7 @@
         </div>
     </nav>
 
-    <div class="container mt-4 mb-5">
+    <div class="container main-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -229,206 +505,268 @@
             {% endif %}
         {% endwith %}
 
-        <h1 class="page-title">Dashboard</h1>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Visão geral do sistema de gerenciamento da igreja</p>
+        </div>
 
-        <!-- Estatísticas dos Membros -->
-        <h4 class="section-title"><i class="fas fa-users me-2"></i>Membros da Igreja</h4>
-        <div class="row">
-            <div class="col-md-3 mb-4">
-                <div class="card stat-card bg-main text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Total de Membros</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ total_membros }}</h2>
-                            </div>
-                            <i class="fas fa-users fa-3x"></i>
-                        </div>
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <!-- Total Membros -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card stat-card bg-light-green text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Homens</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ homens_membros }}</h2>
-                            </div>
-                            <i class="fas fa-male fa-3x"></i>
-                        </div>
-                    </div>
+                <div class="stat-value">{{ total_membros }}</div>
+                <div class="stat-label">Total de Membros</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-church me-1"></i>
+                    Membros registrados
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="card stat-card bg-dark-green text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Mulheres</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ mulheres_membros }}</h2>
-                            </div>
-                            <i class="fas fa-female fa-3x"></i>
-                        </div>
+
+            <!-- Homens -->
+            <div class="stat-card blue">
+                <div class="stat-header">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-male"></i>
                     </div>
                 </div>
+                <div class="stat-value">{{ homens_membros }}</div>
+                <div class="stat-label">Homens</div>
+                <div class="stat-change neutral">
+                    {% if total_membros > 0 %}
+                    {{ "%.1f"|format((homens_membros / total_membros * 100)) }}% do total
+                    {% else %}
+                    0% do total
+                    {% endif %}
+                </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="card stat-card bg-lighter-green text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Dependentes</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ total_dependentes }}</h2>
-                            </div>
-                            <i class="fas fa-child fa-3x"></i>
-                        </div>
+
+            <!-- Mulheres -->
+            <div class="stat-card purple">
+                <div class="stat-header">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-female"></i>
                     </div>
+                </div>
+                <div class="stat-value">{{ mulheres_membros }}</div>
+                <div class="stat-label">Mulheres</div>
+                <div class="stat-change neutral">
+                    {% if total_membros > 0 %}
+                    {{ "%.1f"|format((mulheres_membros / total_membros * 100)) }}% do total
+                    {% else %}
+                    0% do total
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Dependentes -->
+            <div class="stat-card orange">
+                <div class="stat-header">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-child"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ total_dependentes }}</div>
+                <div class="stat-label">Dependentes</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-family me-1"></i>
+                    Filhos e familiares
+                </div>
+            </div>
+
+            <!-- Total Pessoas -->
+            <div class="stat-card pink">
+                <div class="stat-header">
+                    <div class="stat-icon pink">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ total_pessoas }}</div>
+                <div class="stat-label">Pessoas Acompanhadas</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-heart me-1"></i>
+                    Visitantes e convertidos
+                </div>
+            </div>
+
+            <!-- Visitantes -->
+            <div class="stat-card blue">
+                <div class="stat-header">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ visitantes }}</div>
+                <div class="stat-label">Visitantes</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-door-open me-1"></i>
+                    Primeiras visitas
+                </div>
+            </div>
+
+            <!-- Novos Convertidos -->
+            <div class="stat-card orange">
+                <div class="stat-header">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-pray"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ novos_convertidos }}</div>
+                <div class="stat-label">Novos Convertidos</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-cross me-1"></i>
+                    Aceitaram Jesus
+                </div>
+            </div>
+
+            <!-- Total Geral -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="stat-value">{{ total_membros + total_pessoas + total_dependentes }}</div>
+                <div class="stat-label">Total Geral</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up me-1"></i>
+                    Toda a comunidade
                 </div>
             </div>
         </div>
 
-        <!-- Estatísticas de Pessoas Não-Membros -->
-        <h4 class="section-title mt-4"><i class="fas fa-user-friends me-2"></i>Pessoas Acompanhadas</h4>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card stat-card bg-main text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Total de Pessoas</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ total_pessoas }}</h2>
-                            </div>
-                            <i class="fas fa-user-friends fa-3x"></i>
-                        </div>
-                    </div>
-                </div>
+        <!-- Actions Section -->
+        <div class="section-header">
+            <div class="section-icon">
+                <i class="fas fa-bolt"></i>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card stat-card bg-light-green text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Visitantes</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ visitantes }}</h2>
-                            </div>
-                            <i class="fas fa-user-check fa-3x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card stat-card bg-dark-green text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-subtitle mb-2 text-white-50">Novos Convertidos</h6>
-                                <h2 class="card-text display-5 fw-bold">{{ novos_convertidos }}</h2>
-                            </div>
-                            <i class="fas fa-pray fa-3x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h2 class="section-title">Ações Rápidas</h2>
         </div>
 
-        <!-- Ações Rápidas -->
-        <div class="card mt-3">
-            <div class="card-header actions-header">
-                <h5 class="mb-0">Ações Rápidas</h5>
-            </div>
-            <div class="card-body bg-white">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="d-grid gap-2">
-                            <h6 class="card-title-small">Membros</h6>
-                            <a href="{{ url_for('cadastro') }}" class="btn btn-main mb-2">
-                                <i class="fas fa-user-plus me-2"></i>Cadastrar Novo Membro
-                            </a>
-                            <a href="{{ url_for('listar_membros') }}" class="btn btn-outline-main">
-                                <i class="fas fa-users me-2"></i>Ver Todos os Membros
-                            </a>
-                        </div>
+        <div class="action-card">
+            <div class="action-grid">
+                <div class="action-item">
+                    <div class="action-icon">
+                        <i class="fas fa-user-plus"></i>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="d-grid gap-2">
-                            <h6 class="card-title-small">Pessoas</h6>
-                            <a href="{{ url_for('cadastro_pessoa') }}" class="btn btn-outline-main mb-2">
-                                <i class="fas fa-user-plus me-2"></i>Cadastrar Nova Pessoa
-                            </a>
-                            <a href="{{ url_for('listar_pessoas') }}" class="btn btn-outline-main">
-                                <i class="fas fa-user-friends me-2"></i>Ver Todas as Pessoas
-                            </a>
-                        </div>
-                    </div>
+                    <h3 class="action-title">Cadastrar Membro</h3>
+                    <p class="action-subtitle">Adicione um novo membro à igreja</p>
+                    <a href="{{ url_for('cadastro') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Novo Membro
+                    </a>
                 </div>
+
+                <div class="action-item">
+                    <div class="action-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3 class="action-title">Cadastrar Pessoa</h3>
+                    <p class="action-subtitle">Registre visitantes e convertidos</p>
+                    <a href="{{ url_for('cadastro_pessoa') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-heart me-2"></i>Nova Pessoa
+                    </a>
+                </div>
+
+                <div class="action-item">
+                    <div class="action-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <h3 class="action-title">Ver Membros</h3>
+                    <p class="action-subtitle">Liste todos os membros cadastrados</p>
+                    <a href="{{ url_for('listar_membros') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-users me-2"></i>Ver Lista
+                    </a>
+                </div>
+
                 {% if session['usuario'] == 'admin' %}
-                <div class="mt-3">
-                    <h6 class="card-title-small">Administração</h6>
-                    <a href="{{ url_for('gerenciar_usuario') }}" class="btn btn-outline-main">
-                        <i class="fas fa-users-cog me-2"></i>Gerenciar Usuários
+                <div class="action-item">
+                    <div class="action-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h3 class="action-title">Gerenciar Usuários</h3>
+                    <p class="action-subtitle">Administre usuários do sistema</p>
+                    <a href="{{ url_for('gerenciar_usuario') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-cog me-2"></i>Gerenciar
                     </a>
                 </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Últimos Cadastros -->
-        <div class="row mt-4">
+        <!-- Recent Activity -->
+        <div class="row">
             <div class="col-md-6">
-                <div class="bg-light-section">
-                    <h5 class="section-title">Últimos Membros Cadastrados</h5>
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h2 class="section-title">Últimos Membros</h2>
+                </div>
+
+                <div class="activity-card">
                     {% if ultimos_membros %}
                         {% for membro in ultimos_membros %}
-                            <div class="list-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="activity-icon status-icon-membro">
-                                        <i class="fas fa-{{ 'male' if membro['Sexo'] == 'Masculino' else 'female' }}"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="mb-0">{{ membro['Nome'] }}</h6>
-                                        <small class="text-muted">{{ membro['Estado Civil'] }} • {{ membro['Bairro'] }}</small>
-                                    </div>
+                            <div class="activity-item">
+                                <div class="activity-avatar">
+                                    <i class="fas fa-{{ 'male' if membro['Sexo'] == 'Masculino' else 'female' }}"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-name">{{ membro['Nome'] }}</div>
+                                    <div class="activity-meta">{{ membro['Estado Civil'] }} • {{ membro['Bairro'] }}</div>
                                 </div>
                             </div>
                         {% endfor %}
                     {% else %}
-                        <p class="text-muted">Nenhum membro cadastrado recentemente.</p>
+                        <div class="text-center py-4">
+                            <i class="fas fa-users text-muted mb-3" style="font-size: 3rem; opacity: 0.3;"></i>
+                            <p class="text-muted">Nenhum membro cadastrado recentemente.</p>
+                        </div>
                     {% endif %}
-                    <div class="mt-3">
-                        <a href="{{ url_for('listar_membros') }}" class="btn btn-sm btn-outline-main">
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('listar_membros') }}" class="btn btn-outline-primary btn-sm">
                             Ver Todos os Membros
                         </a>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6">
-                <div class="bg-light-section">
-                    <h5 class="section-title">Últimas Pessoas Cadastradas</h5>
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h2 class="section-title">Últimas Pessoas</h2>
+                </div>
+
+                <div class="activity-card">
                     {% if ultimas_pessoas %}
                         {% for pessoa in ultimas_pessoas %}
-                            <div class="list-card">
-                                <div class="d-flex align-items-center">
-                                    <div class="activity-icon status-icon-{{ 'visitante' if pessoa['Situação'] == 'Visitante' else 'convertido' }}">
-                                        <i class="fas fa-{{ 'male' if pessoa['Sexo'] == 'Masculino' else 'female' }}"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-0">{{ pessoa['Nome'] }}</h6>
-                                        <small class="text-muted">{{ pessoa['Estado Civil'] }} • {{ pessoa['Bairro'] }}</small>
-                                    </div>
-                                    <div>
-                                        <span class="badge badge-{{ 'visitante' if pessoa['Situação'] == 'Visitante' else 'convertido' }}">
-                                            {{ pessoa['Situação'] }}
-                                        </span>
-                                    </div>
+                            <div class="activity-item">
+                                <div class="activity-avatar">
+                                    <i class="fas fa-{{ 'male' if pessoa['Sexo'] == 'Masculino' else 'female' }}"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-name">{{ pessoa['Nome'] }}</div>
+                                    <div class="activity-meta">{{ pessoa['Estado Civil'] }} • {{ pessoa['Bairro'] }}</div>
+                                </div>
+                                <div class="activity-badge badge-{{ 'visitante' if pessoa['Situação'] == 'Visitante' else 'convertido' }}">
+                                    {{ pessoa['Situação'] }}
                                 </div>
                             </div>
                         {% endfor %}
                     {% else %}
-                        <p class="text-muted">Nenhuma pessoa cadastrada recentemente.</p>
+                        <div class="text-center py-4">
+                            <i class="fas fa-user-friends text-muted mb-3" style="font-size: 3rem; opacity: 0.3;"></i>
+                            <p class="text-muted">Nenhuma pessoa cadastrada recentemente.</p>
+                        </div>
                     {% endif %}
-                    <div class="mt-3">
-                        <a href="{{ url_for('listar_pessoas') }}" class="btn btn-sm btn-outline-main">
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('listar_pessoas') }}" class="btn btn-outline-primary btn-sm">
                             Ver Todas as Pessoas
                         </a>
                     </div>

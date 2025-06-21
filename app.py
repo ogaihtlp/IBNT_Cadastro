@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import bcrypt
 import json
+from datetime import date, datetime
 
 app = Flask(__name__)
 app.secret_key = 'chave_secreta'
@@ -13,7 +14,7 @@ MEMBERS_FILE = 'membros.csv'
 PESSOAS_FILE = 'pessoas.csv'
 
 def init_files():
-    """Inicializa os arquivos de usuários e membros se não existirem"""
+    """Inicializa os arquivos de usuários, membros e pessoas se não existirem"""
     # Cria arquivo de usuários se não existir
     if not os.path.exists(USERS_FILE):
         df = pd.DataFrame(columns=['usuario', 'senha'])
@@ -25,15 +26,87 @@ def init_files():
     # Cria arquivo de membros se não existir
     if not os.path.exists(MEMBERS_FILE):
         df = pd.DataFrame(columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                   'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes'])
+                                   'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes',
+                                   'É Dependente', 'ID Responsável'])
         df.to_csv(MEMBERS_FILE, index=False)
         print("Arquivo de membros criado")
 
     if not os.path.exists(PESSOAS_FILE):
         df = pd.DataFrame(columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                  'Situação', 'Observações', 'Data de Cadastro', 'Dependentes'])
+                                  'Situação', 'Observações', 'Data de Cadastro', 'Dependentes',
+                                  'É Dependente', 'ID Responsável'])
         df.to_csv(PESSOAS_FILE, index=False)
         print("Arquivo de pessoas criado")
+
+def migrar_dados_existentes():
+    """Migra dados existentes para o novo formato com colunas adicionais"""
+    # Migrar membros
+    if os.path.exists(MEMBERS_FILE):
+        df = pd.read_csv(MEMBERS_FILE)
+        if 'É Dependente' not in df.columns:
+            df['É Dependente'] = 'Não'
+        if 'ID Responsável' not in df.columns:
+            df['ID Responsável'] = ''
+        df.to_csv(MEMBERS_FILE, index=False)
+    
+    # Migrar pessoas
+    if os.path.exists(PESSOAS_FILE):
+        df = pd.read_csv(PESSOAS_FILE)
+        if 'É Dependente' not in df.columns:
+            df['É Dependente'] = 'Não'
+        if 'ID Responsável' not in df.columns:
+            df['ID Responsável'] = ''
+        df.to_csv(PESSOAS_FILE, index=False)
+
+def calcular_idade(data_nascimento):
+    """Calcula a idade com base na data de nascimento"""
+    if not data_nascimento:
+        return 0
+    try:
+        nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
+        hoje = date.today()
+        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+        return idade
+    except:
+        return 0
+
+def contar_membros_com_dependentes():
+    """Conta todos os membros incluindo dependentes que são membros completos"""
+    df_membros = pd.read_csv(MEMBERS_FILE)
+    
+    total_membros = len(df_membros)
+    homens_membros = len(df_membros[df_membros['Sexo'] == 'Masculino'])
+    mulheres_membros = len(df_membros[df_membros['Sexo'] == 'Feminino'])
+    
+    # Conta dependentes simples (que não são membros completos)
+    total_dependentes_simples = 0
+    for deps in df_membros['Dependentes']:
+        if isinstance(deps, str) and deps.strip():
+            try:
+                deps_list = json.loads(deps)
+                for dep in deps_list:
+                    # Se não tem 'tipo' ou tipo é 'simples', conta como dependente simples
+                    if dep.get('tipo', 'simples') == 'simples':
+                        total_dependentes_simples += 1
+            except:
+                # Formato antigo - conta como dependente simples
+                if isinstance(deps_list, list):
+                    total_dependentes_simples += len(deps_list)
+    
+    # Conta dependentes das pessoas não-membros
+    df_pessoas = pd.read_csv(PESSOAS_FILE)
+    for deps in df_pessoas['Dependentes']:
+        if isinstance(deps, str) and deps.strip():
+            try:
+                deps_list = json.loads(deps)
+                for dep in deps_list:
+                    if dep.get('tipo', 'simples') == 'simples':
+                        total_dependentes_simples += 1
+            except:
+                if isinstance(deps_list, list):
+                    total_dependentes_simples += len(deps_list)
+    
+    return total_membros, homens_membros, mulheres_membros, total_dependentes_simples
 
 def criar_usuario_padrao(usuario, senha):
     """Cria um usuário padrão com senha hashada"""
@@ -65,6 +138,33 @@ def criar_usuario(usuario, senha):
     df = pd.concat([df, novo_usuario], ignore_index=True)
     df.to_csv(USERS_FILE, index=False)
     return True
+
+def cadastrar_dependente_como_membro(dados_dependente, id_responsavel):
+    """Cadastra um dependente como membro completo"""
+    df_membros = pd.read_csv(MEMBERS_FILE)
+    
+    novo_membro = pd.DataFrame([[
+        dados_dependente['nome'],
+        dados_dependente['nascimento'],
+        dados_dependente['sexo'],
+        dados_dependente['estado_civil'],
+        dados_dependente['rua'],
+        dados_dependente['numero'],
+        dados_dependente['bairro'],
+        dados_dependente['data_batismo'],
+        dados_dependente['batismo_outra_igreja'],
+        dados_dependente['nome_igreja'],
+        json.dumps([]),  # Dependentes vazios inicialmente
+        'Sim',  # É Dependente
+        str(id_responsavel)  # ID do Responsável
+    ]], columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
+                 'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes',
+                 'É Dependente', 'ID Responsável'])
+    
+    df_membros = pd.concat([df_membros, novo_membro], ignore_index=True)
+    df_membros.to_csv(MEMBERS_FILE, index=False)
+    
+    return len(df_membros) - 1  # Retorna o índice do novo membro
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -108,11 +208,11 @@ def dashboard():
     if not os.path.exists(MEMBERS_FILE) or not os.path.exists(PESSOAS_FILE):
         init_files()
     
-    # Carrega dados dos membros
-    df_membros = pd.read_csv(MEMBERS_FILE)
-    total_membros = len(df_membros)
-    homens_membros = len(df_membros[df_membros['Sexo'] == 'Masculino'])
-    mulheres_membros = len(df_membros[df_membros['Sexo'] == 'Feminino'])
+    # Migra dados existentes se necessário
+    migrar_dados_existentes()
+    
+    # Carrega dados dos membros com nova contagem
+    total_membros, homens_membros, mulheres_membros, total_dependentes = contar_membros_com_dependentes()
     
     # Carrega dados das pessoas (não membros)
     df_pessoas = pd.read_csv(PESSOAS_FILE)
@@ -120,28 +220,8 @@ def dashboard():
     visitantes = len(df_pessoas[df_pessoas['Situação'] == 'Visitante'])
     novos_convertidos = len(df_pessoas[df_pessoas['Situação'] == 'Novo Convertido'])
     
-    # Contagem de dependentes (para ambos, membros e pessoas)
-    total_dependentes = 0
-    
-    # Conta dependentes de membros
-    for deps in df_membros['Dependentes']:
-        if isinstance(deps, str) and deps.strip():
-            try:
-                deps_list = json.loads(deps)
-                total_dependentes += len(deps_list)
-            except:
-                pass
-    
-    # Conta dependentes de pessoas não-membros
-    for deps in df_pessoas['Dependentes']:
-        if isinstance(deps, str) and deps.strip():
-            try:
-                deps_list = json.loads(deps)
-                total_dependentes += len(deps_list)
-            except:
-                pass
-    
-    # Últimos cadastros (combinando membros e pessoas)
+    # Últimos cadastros
+    df_membros = pd.read_csv(MEMBERS_FILE)
     ultimos_membros = []
     if not df_membros.empty:
         ultimos_membros = df_membros.tail(3).to_dict('records')
@@ -180,26 +260,92 @@ def cadastro():
         batismo_outra_igreja = request.form.get('batismo_outra_igreja', 'Não')
         nome_igreja = request.form.get('nome_igreja', '')
         
+        # Migra dados se necessário
+        migrar_dados_existentes()
+        
         # Processa dependentes
         dependentes = []
         dep_nomes = request.form.getlist('dep_nome')
+        dep_tipos = request.form.getlist('dep_tipo')
+        
         if dep_nomes:
             for i in range(len(dep_nomes)):
                 if dep_nomes[i]:  # Verifica se o nome não está vazio
-                    dependente = {
-                        "Nome": dep_nomes[i],
-                        "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
-                        "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
-                    }
+                    tipo_dep = dep_tipos[i] if i < len(dep_tipos) else 'simples'
+                    
+                    if tipo_dep == 'simples':
+                        # Dependente simples (formato antigo)
+                        dependente = {
+                            "tipo": "simples",
+                            "Nome": dep_nomes[i],
+                            "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
+                            "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
+                        }
+                    else:
+                        # Dependente completo - será cadastrado como membro
+                        dependente = {
+                            "tipo": "membro",
+                            "Nome": dep_nomes[i],
+                            "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
+                            "Sexo": request.form.getlist('dep_sexo')[i] if i < len(request.form.getlist('dep_sexo')) else "",
+                            "Estado Civil": request.form.getlist('dep_estado_civil')[i] if i < len(request.form.getlist('dep_estado_civil')) else "",
+                            "Rua": request.form.getlist('dep_rua')[i] if i < len(request.form.getlist('dep_rua')) else rua,
+                            "Numero": request.form.getlist('dep_numero')[i] if i < len(request.form.getlist('dep_numero')) else numero,
+                            "Bairro": request.form.getlist('dep_bairro')[i] if i < len(request.form.getlist('dep_bairro')) else bairro,
+                            "Data do Batismo": request.form.getlist('dep_data_batismo')[i] if i < len(request.form.getlist('dep_data_batismo')) else "",
+                            "Batismo em Outra Igreja": request.form.getlist('dep_batismo_outra_igreja')[i] if i < len(request.form.getlist('dep_batismo_outra_igreja')) else "Não",
+                            "Nome da Igreja": request.form.getlist('dep_nome_igreja')[i] if i < len(request.form.getlist('dep_nome_igreja')) else ""
+                        }
+                    
                     dependentes.append(dependente)
         
-        # Salva o novo membro
+        # Salva o membro principal
         df = pd.read_csv(MEMBERS_FILE)
         novo_membro = pd.DataFrame([[nome, nascimento, sexo, estado_civil, rua, numero, bairro, 
-                                     data_batismo, batismo_outra_igreja, nome_igreja, json.dumps(dependentes)]],
+                                     data_batismo, batismo_outra_igreja, nome_igreja, json.dumps([]),
+                                     'Não', '']],
                                     columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                             'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes'])
+                                             'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes',
+                                             'É Dependente', 'ID Responsável'])
         df = pd.concat([df, novo_membro], ignore_index=True)
+        df.to_csv(MEMBERS_FILE, index=False)
+        
+        # ID do membro principal (último inserido)
+        id_responsavel = len(df) - 1
+        
+        # Processa dependentes e cadastra os membros completos
+        dependentes_finais = []
+        for dep in dependentes:
+            if dep['tipo'] == 'membro':
+                # Cadastra como membro completo
+                dados_dep = {
+                    'nome': dep['Nome'],
+                    'nascimento': dep['Nascimento'],
+                    'sexo': dep['Sexo'],
+                    'estado_civil': dep['Estado Civil'],
+                    'rua': dep['Rua'],
+                    'numero': dep['Numero'],
+                    'bairro': dep['Bairro'],
+                    'data_batismo': dep['Data do Batismo'],
+                    'batismo_outra_igreja': dep['Batismo em Outra Igreja'],
+                    'nome_igreja': dep['Nome da Igreja']
+                }
+                
+                id_dep = cadastrar_dependente_como_membro(dados_dep, id_responsavel)
+                
+                # Adiciona referência ao dependente membro
+                dependentes_finais.append({
+                    "tipo": "membro",
+                    "Nome": dep['Nome'],
+                    "ID_Membro": id_dep
+                })
+            else:
+                # Mantém como dependente simples
+                dependentes_finais.append(dep)
+        
+        # Atualiza o membro principal com os dependentes
+        df = pd.read_csv(MEMBERS_FILE)
+        df.at[id_responsavel, 'Dependentes'] = json.dumps(dependentes_finais)
         df.to_csv(MEMBERS_FILE, index=False)
         
         flash('Membro cadastrado com sucesso!', 'success')
@@ -263,10 +409,26 @@ def listar_membros():
     if not os.path.exists(MEMBERS_FILE):
         init_files()
     
+    migrar_dados_existentes()
     df = pd.read_csv(MEMBERS_FILE)
     
-    # Converte o DataFrame para uma lista de dicionários (melhor para o template)
+    # Converte o DataFrame para uma lista de dicionários
     membros = df.to_dict('records')
+    
+    # Adiciona informações sobre dependentes
+    for i, membro in enumerate(membros):
+        dependentes_info = []
+        if isinstance(membro['Dependentes'], str) and membro['Dependentes'].strip():
+            try:
+                deps = json.loads(membro['Dependentes'])
+                for dep in deps:
+                    if dep.get('tipo') == 'membro':
+                        dependentes_info.append(f"{dep['Nome']} (Membro)")
+                    else:
+                        dependentes_info.append(f"{dep['Nome']} (Dependente)")
+            except:
+                pass
+        membro['DependentesInfo'] = ', '.join(dependentes_info) if dependentes_info else 'Nenhum'
     
     return render_template('membros.html', membros=membros)
 
@@ -287,11 +449,35 @@ def visualizar_membro(indice):
     # Obtém o membro
     membro = df.iloc[indice].to_dict()
     
-    # Converte os dependentes de JSON para lista
-    if isinstance(membro['Dependentes'], str):
-        membro['Dependentes'] = json.loads(membro['Dependentes'])
-    else:
-        membro['Dependentes'] = []
+    # Processa dependentes
+    dependentes_processados = []
+    if isinstance(membro['Dependentes'], str) and membro['Dependentes'].strip():
+        try:
+            deps = json.loads(membro['Dependentes'])
+            for dep in deps:
+                if dep.get('tipo') == 'membro':
+                    # Busca informações completas do dependente membro
+                    id_dep = dep.get('ID_Membro')
+                    if id_dep is not None and id_dep < len(df):
+                        dep_completo = df.iloc[id_dep].to_dict()
+                        dep['DadosCompletos'] = dep_completo
+                dependentes_processados.append(dep)
+        except:
+            dependentes_processados = []
+    
+    membro['DependentesProcessados'] = dependentes_processados
+    
+    # Verifica se é um dependente
+    responsavel_info = None
+    if membro.get('É Dependente') == 'Sim' and membro.get('ID Responsável'):
+        try:
+            id_resp = int(membro['ID Responsável'])
+            if id_resp < len(df):
+                responsavel_info = df.iloc[id_resp].to_dict()
+        except:
+            pass
+    
+    membro['ResponsavelInfo'] = responsavel_info
     
     return render_template('visualizar_membro.html', membro=membro, indice=indice)
 
@@ -359,7 +545,10 @@ def editar_membro(indice):
     
     # Converte os dependentes de JSON para lista
     if isinstance(membro['Dependentes'], str):
-        membro['Dependentes'] = json.loads(membro['Dependentes'])
+        try:
+            membro['Dependentes'] = json.loads(membro['Dependentes'])
+        except:
+            membro['Dependentes'] = []
     else:
         membro['Dependentes'] = []
     
@@ -379,8 +568,27 @@ def excluir_membro(indice):
         flash('Membro não encontrado.', 'error')
         return redirect(url_for('listar_membros'))
     
+    # Verifica se há dependentes que são membros
+    membro = df.iloc[indice]
+    dependentes_membros = []
+    
+    if isinstance(membro['Dependentes'], str) and membro['Dependentes'].strip():
+        try:
+            deps = json.loads(membro['Dependentes'])
+            for dep in deps:
+                if dep.get('tipo') == 'membro':
+                    dependentes_membros.append(dep.get('ID_Membro'))
+        except:
+            pass
+    
     # Remove a linha do DataFrame
     df = df.drop(indice).reset_index(drop=True)
+    
+    # Atualiza IDs dos dependentes que são membros (remove vinculação)
+    for id_dep in dependentes_membros:
+        if id_dep is not None and id_dep < len(df):
+            df.at[id_dep, 'É Dependente'] = 'Não'
+            df.at[id_dep, 'ID Responsável'] = ''
     
     # Salva o DataFrame atualizado
     df.to_csv(MEMBERS_FILE, index=False)
@@ -388,31 +596,6 @@ def excluir_membro(indice):
     flash('Membro excluído com sucesso!', 'success')
     return redirect(url_for('listar_membros'))
 
-def init_files():
-    """Inicializa os arquivos de usuários, membros e pessoas se não existirem"""
-    # Cria arquivo de usuários se não existir
-    if not os.path.exists(USERS_FILE):
-        df = pd.DataFrame(columns=['usuario', 'senha'])
-        df.to_csv(USERS_FILE, index=False)
-        # Cria usuário admin padrão
-        criar_usuario_padrao('admin', '123456')
-        print("Arquivo de usuários criado com usuário padrão: admin / 123456")
-    
-    # Cria arquivo de membros se não existir
-    if not os.path.exists(MEMBERS_FILE):
-        df = pd.DataFrame(columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                   'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes'])
-        df.to_csv(MEMBERS_FILE, index=False)
-        print("Arquivo de membros criado")
-    
-    # Cria arquivo de pessoas se não existir
-    if not os.path.exists(PESSOAS_FILE):
-        df = pd.DataFrame(columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                  'Situação', 'Observações', 'Data de Cadastro', 'Dependentes'])
-        df.to_csv(PESSOAS_FILE, index=False)
-        print("Arquivo de pessoas criado")
-
-# Adicione as rotas para gerenciar pessoas (não membros)
 @app.route('/pessoas')
 def listar_pessoas():
     """Página para visualizar todas as pessoas cadastradas (não membros)"""
@@ -424,6 +607,7 @@ def listar_pessoas():
     if not os.path.exists(PESSOAS_FILE):
         init_files()
     
+    migrar_dados_existentes()
     df = pd.read_csv(PESSOAS_FILE)
     
     # Converte o DataFrame para uma lista de dicionários
@@ -450,8 +634,10 @@ def cadastro_pessoa():
         observacoes = request.form.get('observacoes', '')
         
         # Obter a data atual para o campo 'Data de Cadastro'
-        from datetime import date
         data_cadastro = date.today().strftime('%Y-%m-%d')
+        
+        # Migra dados se necessário
+        migrar_dados_existentes()
         
         # Processa dependentes
         dependentes = []
@@ -460,6 +646,7 @@ def cadastro_pessoa():
             for i in range(len(dep_nomes)):
                 if dep_nomes[i]:  # Verifica se o nome não está vazio
                     dependente = {
+                        "tipo": "simples",
                         "Nome": dep_nomes[i],
                         "Nascimento": request.form.getlist('dep_nascimento')[i] if i < len(request.form.getlist('dep_nascimento')) else "",
                         "Batizado": request.form.getlist('dep_batizado')[i] if i < len(request.form.getlist('dep_batizado')) else "Não"
@@ -471,9 +658,10 @@ def cadastro_pessoa():
             # Preparar dados para adicionar ao arquivo de membros
             df_membros = pd.read_csv(MEMBERS_FILE)
             novo_membro = pd.DataFrame([[nome, nascimento, sexo, estado_civil, rua, numero, bairro, 
-                                        '', 'Não', '', json.dumps(dependentes)]],
+                                        '', 'Não', '', json.dumps(dependentes), 'Não', '']],
                                        columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                               'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes'])
+                                               'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes',
+                                               'É Dependente', 'ID Responsável'])
             df_membros = pd.concat([df_membros, novo_membro], ignore_index=True)
             df_membros.to_csv(MEMBERS_FILE, index=False)
             
@@ -483,9 +671,11 @@ def cadastro_pessoa():
             # Salva a nova pessoa no arquivo de pessoas
             df = pd.read_csv(PESSOAS_FILE)
             nova_pessoa = pd.DataFrame([[nome, nascimento, sexo, estado_civil, rua, numero, bairro, 
-                                        situacao, observacoes, data_cadastro, json.dumps(dependentes)]],
+                                        situacao, observacoes, data_cadastro, json.dumps(dependentes),
+                                        'Não', '']],
                                       columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                              'Situação', 'Observações', 'Data de Cadastro', 'Dependentes'])
+                                              'Situação', 'Observações', 'Data de Cadastro', 'Dependentes',
+                                              'É Dependente', 'ID Responsável'])
             df = pd.concat([df, nova_pessoa], ignore_index=True)
             df.to_csv(PESSOAS_FILE, index=False)
             
@@ -513,7 +703,10 @@ def visualizar_pessoa(indice):
     
     # Converte os dependentes de JSON para lista
     if isinstance(pessoa['Dependentes'], str):
-        pessoa['Dependentes'] = json.loads(pessoa['Dependentes'])
+        try:
+            pessoa['Dependentes'] = json.loads(pessoa['Dependentes'])
+        except:
+            pessoa['Dependentes'] = []
     else:
         pessoa['Dependentes'] = []
     
@@ -565,9 +758,10 @@ def editar_pessoa(indice):
             # Adicionar ao arquivo de membros
             df_membros = pd.read_csv(MEMBERS_FILE)
             novo_membro = pd.DataFrame([[nome, nascimento, sexo, estado_civil, rua, numero, bairro, 
-                                        '', 'Não', '', json.dumps(dependentes)]],
+                                        '', 'Não', '', json.dumps(dependentes), 'Não', '']],
                                        columns=['Nome', 'Nascimento', 'Sexo', 'Estado Civil', 'Rua', 'Número', 'Bairro',
-                                               'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes'])
+                                               'Data do Batismo', 'Batismo em Outra Igreja', 'Nome da Igreja', 'Dependentes',
+                                               'É Dependente', 'ID Responsável'])
             df_membros = pd.concat([df_membros, novo_membro], ignore_index=True)
             df_membros.to_csv(MEMBERS_FILE, index=False)
             
@@ -601,7 +795,10 @@ def editar_pessoa(indice):
     
     # Converte os dependentes de JSON para lista
     if isinstance(pessoa['Dependentes'], str):
-        pessoa['Dependentes'] = json.loads(pessoa['Dependentes'])
+        try:
+            pessoa['Dependentes'] = json.loads(pessoa['Dependentes'])
+        except:
+            pessoa['Dependentes'] = []
     else:
         pessoa['Dependentes'] = []
     
@@ -633,4 +830,5 @@ def excluir_pessoa(indice):
 if __name__ == '__main__':
     # Inicializa os arquivos ao iniciar o aplicativo
     init_files()
+    migrar_dados_existentes()
     app.run(debug=True)
