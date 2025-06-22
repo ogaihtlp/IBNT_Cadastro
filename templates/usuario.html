@@ -6,72 +6,474 @@
     <title>Gerenciar Usuários - Sistema de Gerenciamento da Igreja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-green: #2e7d32;
-            --light-green: #81c784;
-            --dark-green: #1b5e20;
-            --pale-green: #e8f5e9;
-            --accent-green: #4caf50;
-            --lighter-green: #c8e6c9;
+            --primary-green: #10b981;
+            --primary-green-light: #34d399;
+            --primary-green-dark: #059669;
+            --secondary-blue: #3b82f6;
+            --secondary-purple: #8b5cf6;
+            --secondary-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
         }
+
+        /* Navbar */
         .navbar {
-            background-color: var(--main-green);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+            border: none;
         }
+
         .navbar-brand {
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--white) !important;
         }
+
         .nav-link {
-            color: rgba(255,255,255,0.85) !important;
-            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
             padding: 0.75rem 1rem !important;
-            transition: all 0.2s;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin: 0 0.25rem;
         }
-        .nav-link:hover, .nav-link.active {
-            color: white !important;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 6px;
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
+
+        /* Main Container */
+        .main-container {
+            padding: 2rem 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Cards */
         .card {
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 0.75rem;
+            color: var(--primary-green);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-label {
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            outline: none;
+        }
+
+        .form-text {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        /* User List */
+        .user-list {
+            border: none;
+        }
+
+        .user-item {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-item:hover {
+            box-shadow: var(--shadow-sm);
+            border-color: var(--primary-green);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-role {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .user-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-admin {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green);
+        }
+
+        .badge-user {
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--gray-600);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            color: var(--gray-800);
+        }
+
+        /* Security section */
+        .security-info {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--border-radius);
+            padding: 1rem;
             margin-bottom: 1.5rem;
         }
-        .card-header {
-            border-bottom: none;
-            padding: 1.2rem 1.5rem;
+
+        .security-info-icon {
+            color: var(--secondary-blue);
+            margin-right: 0.5rem;
+        }
+
+        .security-info-text {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            margin: 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            color: var(--gray-500);
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green-dark);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-green-light));
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
             font-weight: 500;
-            color: white;
-            background-color: var(--main-green);
         }
-        .btn-main {
-            background-color: var(--main-green);
-            border-color: var(--main-green);
-            color: white;
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem 0;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+
+            .user-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-avatar {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
         }
-        .btn-main:hover {
-            background-color: var(--dark-green);
-            border-color: var(--dark-green);
-            color: white;
+
+        /* Loading */
+        .btn.loading {
+            position: relative;
+            color: transparent;
         }
-        .form-control:focus {
-            border-color: var(--light-green);
-            box-shadow: 0 0 0 0.25rem rgba(129, 199, 132, 0.25);
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--white);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2e7d32;">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-church me-2"></i>
-                Sistema de Gerenciamento
+                Cadastro IBNT
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -117,58 +519,172 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container main-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'info' }}">
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'info' }} alert-dismissible fade show">
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category == 'error' else 'info-circle' }} me-2"></i>
                         {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
-        <h1 class="mb-4">Gerenciar Usuários</h1>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Gerenciar Usuários</h1>
+            <p class="page-subtitle">Controle o acesso ao sistema da igreja</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ usuarios|length }}</div>
+                <div class="stat-label">Total de Usuários</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ usuarios|select('equalto', 'admin')|list|length }}</div>
+                <div class="stat-label">Administradores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ usuarios|reject('equalto', 'admin')|list|length }}</div>
+                <div class="stat-label">Usuários Comuns</div>
+            </div>
+        </div>
 
         <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
+            <div class="col-lg-6">
+                <!-- Create User Form -->
+                <div class="card fade-in">
                     <div class="card-header">
-                        <h5 class="mb-0">Criar Novo Usuário</h5>
+                        <h3 class="card-title">
+                            <i class="fas fa-user-plus"></i>
+                            Criar Novo Usuário
+                        </h3>
                     </div>
                     <div class="card-body">
-                        <form method="post">
+                        <div class="security-info">
+                            <i class="fas fa-shield-alt security-info-icon"></i>
+                            <p class="security-info-text">
+                                <strong>Segurança:</strong> As senhas são criptografadas automaticamente. 
+                                Recomendamos senhas com pelo menos 8 caracteres.
+                            </p>
+                        </div>
+
+                        <form method="post" id="userForm">
                             <div class="mb-3">
-                                <label for="novo_usuario" class="form-label">Nome de Usuário</label>
+                                <label for="novo_usuario" class="form-label">Nome de Usuário *</label>
                                 <input type="text" class="form-control" id="novo_usuario" name="novo_usuario" required>
+                                <div class="form-text">Escolha um nome único para o usuário</div>
                             </div>
                             <div class="mb-3">
-                                <label for="nova_senha" class="form-label">Senha</label>
-                                <input type="password" class="form-control" id="nova_senha" name="nova_senha" required>
+                                <label for="nova_senha" class="form-label">Senha *</label>
+                                <input type="password" class="form-control" id="nova_senha" name="nova_senha" required minlength="6">
+                                <div class="form-text">Mínimo de 6 caracteres</div>
                             </div>
-                            <button type="submit" class="btn btn-main">Criar Usuário</button>
+                            <div class="mb-3">
+                                <label for="confirmar_senha" class="form-label">Confirmar Senha *</label>
+                                <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha" required minlength="6">
+                                <div class="form-text">Digite a senha novamente para confirmar</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-user-plus"></i>
+                                Criar Usuário
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card">
+            <div class="col-lg-6">
+                <!-- Users List -->
+                <div class="card fade-in">
                     <div class="card-header">
-                        <h5 class="mb-0">Usuários Existentes</h5>
+                        <h3 class="card-title">
+                            <i class="fas fa-users"></i>
+                            Usuários Existentes
+                        </h3>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group">
-                            {% for usuario in usuarios %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ usuario }}
-                                {% if usuario == 'admin' %}
-                                <span class="badge bg-success">Administrador</span>
-                                {% else %}
-                                <span class="badge bg-secondary">Usuário</span>
-                                {% endif %}
+                        {% if usuarios %}
+                            <div class="user-list">
+                                {% for usuario in usuarios %}
+                                    <div class="user-item">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                {{ usuario[:1].upper() }}
+                                            </div>
+                                            <div class="user-details">
+                                                <div class="user-name">{{ usuario }}</div>
+                                                <div class="user-role">
+                                                    {% if usuario == 'admin' %}
+                                                        Administrador do Sistema
+                                                    {% else %}
+                                                        Usuário Padrão
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="user-badges">
+                                            {% if usuario == 'admin' %}
+                                                <span class="user-badge badge-admin">
+                                                    <i class="fas fa-crown me-1"></i>
+                                                    Administrador
+                                                </span>
+                                            {% else %}
+                                                <span class="user-badge badge-user">
+                                                    <i class="fas fa-user me-1"></i>
+                                                    Usuário
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-state-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3 class="empty-state-title">Nenhum usuário encontrado</h3>
+                                <p class="empty-state-text">Crie o primeiro usuário do sistema.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Security Tips -->
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Dicas de Segurança
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Use senhas fortes com pelo menos 8 caracteres
                             </li>
-                            {% endfor %}
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Combine letras, números e símbolos
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Não compartilhe suas credenciais
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Faça logout ao sair do sistema
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Apenas administradores podem criar usuários
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -177,5 +693,84 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            const senha = document.getElementById('nova_senha').value;
+            const confirmarSenha = document.getElementById('confirmar_senha').value;
+            
+            if (senha !== confirmarSenha) {
+                e.preventDefault();
+                alert('As senhas não coincidem. Por favor, verifique e tente novamente.');
+                return false;
+            }
+            
+            // Add loading state
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        });
+
+        // Password confirmation validation
+        document.getElementById('confirmar_senha').addEventListener('input', function() {
+            const senha = document.getElementById('nova_senha').value;
+            const confirmarSenha = this.value;
+            
+            if (senha !== confirmarSenha && confirmarSenha !== '') {
+                this.setCustomValidity('As senhas não coincidem');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        // Real-time password matching
+        document.getElementById('nova_senha').addEventListener('input', function() {
+            const confirmarSenha = document.getElementById('confirmar_senha');
+            if (confirmarSenha.value !== '') {
+                if (this.value !== confirmarSenha.value) {
+                    confirmarSenha.setCustomValidity('As senhas não coincidem');
+                } else {
+                    confirmarSenha.setCustomValidity('');
+                }
+            }
+        });
+
+        // Animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.fade-in');
+            const userItems = document.querySelectorAll('.user-item');
+            
+            // Animate cards
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+
+            // Animate user items
+            userItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'all 0.4s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 600 + (index * 100));
+            });
+        });
+
+        // Remove loading state if there's an error
+        window.addEventListener('load', function() {
+            const btn = document.getElementById('submitBtn');
+            btn.classList.remove('loading');
+            btn.disabled = false;
+        });
+    </script>
 </body>
 </html>

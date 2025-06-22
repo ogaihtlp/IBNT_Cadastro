@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Membro - Sistema de Gerenciamento da Igreja</title>
+    <title>Detalhes da Pessoa - Sistema de Gerenciamento da Igreja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -84,7 +84,7 @@
         }
 
         /* Header Section */
-        .member-header {
+        .person-header {
             background: var(--white);
             border-radius: var(--border-radius-lg);
             padding: 2rem;
@@ -93,17 +93,17 @@
             border: 1px solid var(--gray-200);
         }
 
-        .member-profile {
+        .person-profile {
             display: flex;
             align-items: center;
             gap: 2rem;
         }
 
-        .member-avatar {
+        .person-avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            background: linear-gradient(135deg, var(--secondary-blue), #60a5fa);
             color: var(--white);
             display: flex;
             align-items: center;
@@ -114,18 +114,18 @@
             flex-shrink: 0;
         }
 
-        .member-info {
+        .person-info {
             flex: 1;
         }
 
-        .member-name {
+        .person-name {
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 0.5rem;
         }
 
-        .member-meta {
+        .person-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
@@ -141,16 +141,16 @@
 
         .meta-item i {
             margin-right: 0.5rem;
-            color: var(--primary-green);
+            color: var(--secondary-blue);
         }
 
-        .member-badges {
+        .person-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
 
-        .member-badge {
+        .person-badge {
             padding: 0.375rem 0.875rem;
             border-radius: 20px;
             font-size: 0.875rem;
@@ -169,15 +169,19 @@
             color: var(--accent-pink);
         }
 
-        .badge-dependent {
+        .badge-visitante {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .badge-convertido {
             background: rgba(245, 158, 11, 0.1);
             color: var(--secondary-orange);
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+        .badge-membro {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green);
         }
 
         .header-actions {
@@ -214,7 +218,7 @@
             width: 48px;
             height: 48px;
             border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            background: linear-gradient(135deg, var(--secondary-blue), #60a5fa);
             color: var(--white);
             display: flex;
             align-items: center;
@@ -275,7 +279,7 @@
             border-radius: var(--border-radius);
             padding: 1.5rem;
             margin-bottom: 1rem;
-            border-left: 4px solid var(--gray-300);
+            border-left: 4px solid var(--secondary-orange);
             transition: all 0.2s ease;
         }
 
@@ -284,52 +288,24 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .dependent-member {
-            border-left-color: var(--primary-green);
-            background: rgba(16, 185, 129, 0.05);
-        }
-
-        .dependent-simple {
-            border-left-color: var(--gray-400);
-        }
-
-        .dependent-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
         .dependent-name {
             font-size: 1.125rem;
             font-weight: 600;
             color: var(--gray-900);
-            margin: 0;
+            margin-bottom: 0.5rem;
         }
 
-        .dependent-type-badge {
+        .dependent-badge {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--secondary-orange);
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .badge-member {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary-green);
-        }
-
-        .badge-simple {
-            background: rgba(107, 114, 128, 0.1);
-            color: var(--gray-600);
-        }
-
-        .dependent-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            display: inline-block;
+            margin-top: 0.5rem;
         }
 
         /* Buttons */
@@ -396,19 +372,49 @@
             color: var(--white);
         }
 
-        .btn-warning {
+        .btn-outline-success {
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-outline-success:hover {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        /* Status Section */
+        .status-section {
+            background: linear-gradient(135deg, var(--secondary-blue), #60a5fa);
+            color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-section.visitante {
+            background: linear-gradient(135deg, var(--secondary-blue), #60a5fa);
+        }
+
+        .status-section.convertido {
             background: linear-gradient(135deg, var(--secondary-orange), #fbbf24);
-            color: var(--white);
         }
 
-        .btn-warning:hover {
-            background: linear-gradient(135deg, #d97706, var(--secondary-orange));
-            color: var(--white);
+        .status-section.membro {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
         }
 
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
         }
 
         /* Alerts */
@@ -432,24 +438,6 @@
         .alert-info {
             background: rgba(59, 130, 246, 0.1);
             color: var(--secondary-blue);
-        }
-
-        .alert-warning {
-            background: rgba(245, 158, 11, 0.1);
-            color: #d97706;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gray-500);
-        }
-
-        .empty-state-icon {
-            font-size: 3rem;
-            color: var(--gray-300);
-            margin-bottom: 1rem;
         }
 
         /* Modal */
@@ -484,25 +472,21 @@
                 padding: 1rem 0;
             }
 
-            .member-profile {
+            .person-profile {
                 flex-direction: column;
                 text-align: center;
                 gap: 1rem;
             }
 
-            .member-name {
+            .person-name {
                 font-size: 2rem;
             }
 
-            .member-meta {
+            .person-meta {
                 justify-content: center;
             }
 
             .header-actions {
-                flex-direction: column;
-            }
-
-            .action-buttons {
                 flex-direction: column;
             }
 
@@ -551,12 +535,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('listar_membros') }}">
+                        <a class="nav-link" href="{{ url_for('listar_membros') }}">
                             <i class="fas fa-users me-1"></i> Membros
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('listar_pessoas') }}">
+                        <a class="nav-link active" href="{{ url_for('listar_pessoas') }}">
                             <i class="fas fa-user-friends me-1"></i> Pessoas
                         </a>
                     </li>
@@ -594,12 +578,12 @@
 
         <!-- Header Actions -->
         <div class="header-actions">
-            <a href="{{ url_for('listar_membros') }}" class="btn btn-secondary">
+            <a href="{{ url_for('listar_pessoas') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i>
                 Voltar para Lista
             </a>
             <div class="ms-auto d-flex gap-2">
-                <a href="{{ url_for('editar_membro', indice=indice) }}" class="btn btn-outline-primary">
+                <a href="{{ url_for('editar_pessoa', indice=indice) }}" class="btn btn-outline-primary">
                     <i class="fas fa-edit"></i>
                     Editar
                 </a>
@@ -607,62 +591,75 @@
                     <i class="fas fa-trash-alt"></i>
                     Excluir
                 </button>
+                {% if pessoa['Situação'] != 'Membro' %}
+                <a href="{{ url_for('editar_pessoa', indice=indice) }}" class="btn btn-outline-success">
+                    <i class="fas fa-user-check"></i>
+                    Tornar Membro
+                </a>
+                {% endif %}
             </div>
         </div>
 
-        {% if session['usuario'] == 'admin' %}
-        <div class="mb-3">
-            <a href="{{ url_for('corrigir_dependentes') }}" class="btn btn-warning btn-sm">
-                <i class="fas fa-tools"></i>
-                Corrigir Dependentes-Membros
-            </a>
-        </div>
-        {% endif %}
-
-        <!-- Member Header -->
-        <div class="member-header fade-in">
-            <div class="member-profile">
-                <div class="member-avatar">
-                    {{ membro['Nome'][:1].upper() }}
+        <!-- Person Header -->
+        <div class="person-header fade-in">
+            <div class="person-profile">
+                <div class="person-avatar">
+                    {{ pessoa['Nome'][:1].upper() }}
                 </div>
-                <div class="member-info">
-                    <h1 class="member-name">{{ membro['Nome'] }}</h1>
-                    <div class="member-meta">
+                <div class="person-info">
+                    <h1 class="person-name">{{ pessoa['Nome'] }}</h1>
+                    <div class="person-meta">
                         <div class="meta-item">
                             <i class="fas fa-calendar"></i>
-                            {{ membro['Nascimento'] }}
+                            {{ pessoa['Nascimento'] }}
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            {{ membro['Bairro'] }}
+                            {{ pessoa['Bairro'] }}
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-ring"></i>
-                            {{ membro['Estado Civil'] }}
+                            {{ pessoa['Estado Civil'] }}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-plus"></i>
+                            Cadastro: {{ pessoa['Data de Cadastro'] }}
                         </div>
                     </div>
-                    <div class="member-badges">
-                        <span class="member-badge badge-{{ 'male' if membro['Sexo'] == 'Masculino' else 'female' }}">
-                            <i class="fas fa-{{ 'mars' if membro['Sexo'] == 'Masculino' else 'venus' }} me-1"></i>
-                            {{ membro['Sexo'] }}
+                    <div class="person-badges">
+                        <span class="person-badge badge-{{ 'male' if pessoa['Sexo'] == 'Masculino' else 'female' }}">
+                            <i class="fas fa-{{ 'mars' if pessoa['Sexo'] == 'Masculino' else 'venus' }} me-1"></i>
+                            {{ pessoa['Sexo'] }}
                         </span>
-                        {% if membro.get('É Dependente') == 'Sim' %}
-                        <span class="member-badge badge-dependent">
-                            <i class="fas fa-link me-1"></i>
-                            Dependente
+                        <span class="person-badge badge-{{ 'visitante' if pessoa['Situação'] == 'Visitante' else 'convertido' if pessoa['Situação'] == 'Novo Convertido' else 'membro' }}">
+                            <i class="fas fa-{{ 'door-open' if pessoa['Situação'] == 'Visitante' else 'pray' if pessoa['Situação'] == 'Novo Convertido' else 'users' }} me-1"></i>
+                            {{ pessoa['Situação'] }}
                         </span>
-                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        {% if membro.get('ResponsavelInfo') %}
-        <div class="alert alert-warning">
-            <i class="fas fa-info-circle me-2"></i>
-            <strong>Este membro é dependente de:</strong> {{ membro['ResponsavelInfo']['Nome'] }}
+        <!-- Status Section -->
+        <div class="status-section {{ 'visitante' if pessoa['Situação'] == 'Visitante' else 'convertido' if pessoa['Situação'] == 'Novo Convertido' else 'membro' }} fade-in">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="fas fa-{{ 'door-open' if pessoa['Situação'] == 'Visitante' else 'pray' if pessoa['Situação'] == 'Novo Convertido' else 'users' }} fa-2x"></i>
+                </div>
+                <div>
+                    <h4 class="mb-1">{{ pessoa['Situação'] }}</h4>
+                    <p class="mb-0 opacity-90">
+                        {% if pessoa['Situação'] == 'Visitante' %}
+                            Esta pessoa visitou nossa igreja e está sendo acompanhada.
+                        {% elif pessoa['Situação'] == 'Novo Convertido' %}
+                            Esta pessoa aceitou Jesus recentemente e está iniciando sua jornada cristã.
+                        {% else %}
+                            Esta pessoa é um membro oficial da igreja.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
         </div>
-        {% endif %}
 
         <div class="row">
             <div class="col-lg-6">
@@ -677,19 +674,19 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Nome Completo</div>
-                            <div class="info-value">{{ membro['Nome'] }}</div>
+                            <div class="info-value">{{ pessoa['Nome'] }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Data de Nascimento</div>
-                            <div class="info-value">{{ membro['Nascimento'] }}</div>
+                            <div class="info-value">{{ pessoa['Nascimento'] }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Sexo</div>
-                            <div class="info-value">{{ membro['Sexo'] }}</div>
+                            <div class="info-value">{{ pessoa['Sexo'] }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Estado Civil</div>
-                            <div class="info-value">{{ membro['Estado Civil'] }}</div>
+                            <div class="info-value">{{ pessoa['Estado Civil'] }}</div>
                         </div>
                     </div>
                 </div>
@@ -705,50 +702,48 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Rua</div>
-                            <div class="info-value">{{ membro['Rua'] }}</div>
+                            <div class="info-value">{{ pessoa['Rua'] }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Número</div>
-                            <div class="info-value">{{ membro['Número'] }}</div>
+                            <div class="info-value">{{ pessoa['Número'] }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Bairro</div>
-                            <div class="info-value">{{ membro['Bairro'] }}</div>
+                            <div class="info-value">{{ pessoa['Bairro'] }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Endereço Completo</div>
-                            <div class="info-value">{{ membro['Rua'] }}, {{ membro['Número'] }} - {{ membro['Bairro'] }}</div>
+                            <div class="info-value">{{ pessoa['Rua'] }}, {{ pessoa['Número'] }} - {{ pessoa['Bairro'] }}</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <!-- Baptism Information -->
+                <!-- Additional Information -->
                 <div class="info-card fade-in">
                     <div class="info-card-header">
                         <div class="info-card-icon">
-                            <i class="fas fa-pray"></i>
+                            <i class="fas fa-info-circle"></i>
                         </div>
-                        <h3 class="info-card-title">Informações de Batismo</h3>
+                        <h3 class="info-card-title">Informações Adicionais</h3>
                     </div>
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-label">Data do Batismo</div>
-                            <div class="info-value {{ 'empty' if not membro['Data do Batismo'] else '' }}">
-                                {{ membro['Data do Batismo'] if membro['Data do Batismo'] else 'Não informado' }}
+                            <div class="info-label">Situação</div>
+                            <div class="info-value">{{ pessoa['Situação'] }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Data de Cadastro</div>
+                            <div class="info-value">{{ pessoa['Data de Cadastro'] }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Observações</div>
+                            <div class="info-value {{ 'empty' if not pessoa['Observações'] else '' }}">
+                                {{ pessoa['Observações'] if pessoa['Observações'] else 'Nenhuma observação cadastrada' }}
                             </div>
                         </div>
-                        <div class="info-item">
-                            <div class="info-label">Batizado em Outra Igreja</div>
-                            <div class="info-value">{{ membro['Batismo em Outra Igreja'] }}</div>
-                        </div>
-                        {% if membro['Batismo em Outra Igreja'] == 'Sim' %}
-                        <div class="info-item">
-                            <div class="info-label">Nome da Igreja</div>
-                            <div class="info-value">{{ membro['Nome da Igreja'] if membro['Nome da Igreja'] else 'Não informado' }}</div>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
 
@@ -756,78 +751,36 @@
                 <div class="dependents-section fade-in">
                     <div class="info-card-header">
                         <div class="info-card-icon">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-child"></i>
                         </div>
                         <h3 class="info-card-title">Dependentes</h3>
                     </div>
-                    {% if membro.get('DependentesProcessados') and membro['DependentesProcessados']|length > 0 %}
-                        {% for dependente in membro['DependentesProcessados'] %}
-                            {% if dependente.get('tipo') == 'membro' %}
-                                <div class="dependent-item dependent-member">
-                                    <div class="dependent-header">
-                                        <h5 class="dependent-name">{{ dependente['Nome'] }}</h5>
-                                        <span class="dependent-type-badge badge-member">Membro Oficial</span>
-                                    </div>
-                                    {% if dependente.get('DadosCompletos') %}
-                                        {% set dados = dependente['DadosCompletos'] %}
-                                        <div class="info-grid">
-                                            <div class="info-item">
-                                                <div class="info-label">Data de Nascimento</div>
-                                                <div class="info-value">{{ dados['Nascimento'] }}</div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label">Sexo</div>
-                                                <div class="info-value">{{ dados['Sexo'] }}</div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label">Estado Civil</div>
-                                                <div class="info-value">{{ dados['Estado Civil'] }}</div>
-                                            </div>
-                                            <div class="info-item">
-                                                <div class="info-label">Status do Batismo</div>
-                                                <div class="info-value">{{ 'Batizado' if dados['Data do Batismo'] else 'Não batizado' }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="dependent-actions">
-                                            <a href="{{ url_for('visualizar_membro', indice=dependente.get('ID_Membro')) }}" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                                Ver Detalhes Completos
-                                            </a>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% else %}
-                                <div class="dependent-item dependent-simple">
-                                    <div class="dependent-header">
-                                        <h5 class="dependent-name">{{ dependente.get('Nome', '') }}</h5>
-                                        <div class="d-flex gap-2">
-                                            <span class="dependent-type-badge badge-simple">Dependente</span>
-                                            <a href="{{ url_for('promover_dependente', id_responsavel=indice, nome_dependente=dependente.get('Nome', '')) }}" 
-                                               class="btn btn-warning btn-sm">
-                                                <i class="fas fa-user-check"></i>
-                                                Promover
-                                            </a>
+                    {% if pessoa['Dependentes'] and pessoa['Dependentes']|length > 0 %}
+                        {% for dependente in pessoa['Dependentes'] %}
+                            <div class="dependent-item">
+                                <h5 class="dependent-name">{{ dependente['Nome'] }}</h5>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">Data de Nascimento</div>
+                                        <div class="info-value {{ 'empty' if not dependente['Nascimento'] else '' }}">
+                                            {{ dependente['Nascimento'] if dependente['Nascimento'] else 'Não informado' }}
                                         </div>
                                     </div>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <div class="info-label">Data de Nascimento</div>
-                                            <div class="info-value {{ 'empty' if not dependente.get('Nascimento') else '' }}">
-                                                {{ dependente.get('Nascimento') if dependente.get('Nascimento') else 'Não informado' }}
-                                            </div>
-                                        </div>
-                                        <div class="info-item">
-                                            <div class="info-label">Status do Batismo</div>
-                                            <div class="info-value">{{ dependente.get('Batizado', 'Não') }}</div>
-                                        </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Status do Batismo</div>
+                                        <div class="info-value">{{ dependente['Batizado'] }}</div>
                                     </div>
                                 </div>
-                            {% endif %}
+                                <span class="dependent-badge">
+                                    <i class="fas fa-{{ 'check-circle' if dependente['Batizado'] == 'Sim' else 'clock' }} me-1"></i>
+                                    {{ 'Batizado' if dependente['Batizado'] == 'Sim' else 'Não Batizado' }}
+                                </span>
+                            </div>
                         {% endfor %}
                     {% else %}
                         <div class="empty-state">
                             <div class="empty-state-icon">
-                                <i class="fas fa-users"></i>
+                                <i class="fas fa-child"></i>
                             </div>
                             <p>Nenhum dependente cadastrado.</p>
                         </div>
@@ -849,23 +802,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-3">Tem certeza que deseja excluir este membro?</p>
-                    <div class="alert alert-warning">
+                    <p class="mb-3">Tem certeza que deseja excluir esta pessoa?</p>
+                    <div class="alert alert-danger">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>Atenção:</strong> Se este membro possuir dependentes que também são membros oficiais, 
-                        eles permanecerão cadastrados como membros independentes após a exclusão.
+                        <strong>Atenção:</strong> Esta ação não pode ser desfeita e todos os dados da pessoa serão perdidos permanentemente.
                     </div>
-                    <p><strong>Esta ação não pode ser desfeita.</strong></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i>
                         Cancelar
                     </button>
-                    <form id="deleteForm" method="post" action="{{ url_for('excluir_membro', indice=indice) }}" class="d-inline">
+                    <form id="deleteForm" method="post" action="{{ url_for('excluir_pessoa', indice=indice) }}" class="d-inline">
                         <button type="submit" class="btn btn-outline-danger">
                             <i class="fas fa-trash-alt"></i>
-                            Excluir Membro
+                            Excluir Pessoa
                         </button>
                     </form>
                 </div>

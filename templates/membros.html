@@ -6,124 +6,475 @@
     <title>Lista de Membros - Sistema de Gerenciamento da Igreja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-green: #2e7d32;
-            --light-green: #81c784;
-            --dark-green: #1b5e20;
-            --pale-green: #e8f5e9;
-            --accent-green: #4caf50;
-            --lighter-green: #c8e6c9;
+            --primary-green: #10b981;
+            --primary-green-light: #34d399;
+            --primary-green-dark: #059669;
+            --secondary-blue: #3b82f6;
+            --secondary-purple: #8b5cf6;
+            --secondary-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
         }
+
+        /* Navbar */
         .navbar {
-            background-color: var(--main-green);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .navbar-brand {
-            font-weight: 500;
-        }
-        .nav-link {
-            color: rgba(255,255,255,0.85) !important;
-            font-weight: 400;
-            padding: 0.75rem 1rem !important;
-            transition: all 0.2s;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: white !important;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 6px;
-        }
-        .card {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
         }
-        .card-header {
-            border-bottom: none;
-            padding: 1.2rem 1.5rem;
-            font-weight: 500;
-            color: white;
-            background-color: var(--main-green);
-        }
-        .btn-main {
-            background-color: var(--main-green);
-            border-color: var(--main-green);
-            color: white;
-        }
-        .btn-main:hover {
-            background-color: var(--dark-green);
-            border-color: var(--dark-green);
-            color: white;
-        }
-        .btn-outline-main {
-            border-color: var(--main-green);
-            color: var(--main-green);
-        }
-        .btn-outline-main:hover {
-            background-color: var(--main-green);
-            color: white;
-        }
-        .page-title {
+
+        .navbar-brand {
             font-weight: 600;
-            color: #333;
-            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--white) !important;
         }
-        .table th {
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 500;
-            color: #495057;
+            padding: 0.75rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin: 0 0.25rem;
         }
-        .table-hover tbody tr:hover {
-            background-color: var(--pale-green);
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
-        .action-btn {
-            color: var(--main-green);
-            text-decoration: none;
-            margin-right: 10px;
+
+        /* Main Container */
+        .main-container {
+            padding: 2rem 0;
         }
-        .action-btn:hover {
-            color: var(--dark-green);
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
         }
-        .action-btn.delete {
-            color: #dc3545;
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
         }
-        .action-btn.delete:hover {
-            color: #b02a37;
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            font-weight: 400;
         }
-        .table-responsive {
-            border-radius: 12px;
-            overflow: hidden;
+
+        /* Search */
+        .search-section {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
         }
+
         .search-container {
             position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            z-index: 10;
+        }
+
+        .search-input {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            outline: none;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        /* Table */
+        .table-responsive {
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            background-color: var(--gray-50);
+            border: none;
+            font-weight: 600;
+            color: var(--gray-700);
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody td {
+            border: none;
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Member Name */
+        .member-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .member-meta {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-male {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .badge-female {
+            background: rgba(236, 72, 153, 0.1);
+            color: var(--accent-pink);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-200);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn.view {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .action-btn.view:hover {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .action-btn.edit {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .action-btn.edit:hover {
+            background: var(--secondary-blue);
+            color: var(--white);
+        }
+
+        .action-btn.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .action-btn.delete:hover {
+            background: #ef4444;
+            color: var(--white);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            background: transparent;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-green);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            color: var(--gray-500);
             margin-bottom: 1.5rem;
         }
-        .search-container i {
-            position: absolute;
-            left: 12px;
-            top: 12px;
-            color: #6c757d;
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
-        .search-input {
-            padding-left: 35px;
-            border-radius: 20px;
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            text-align: center;
         }
-        .search-input:focus {
-            border-color: var(--light-green);
-            box-shadow: 0 0 0 0.25rem rgba(129, 199, 132, 0.25);
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green-dark);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: var(--border-radius-lg);
+            border: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem 0;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .search-section {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table tbody tr {
+                display: block;
+                border: 1px solid var(--gray-200);
+                border-radius: var(--border-radius);
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+
+            .table tbody td {
+                display: block;
+                border: none;
+                padding: 0.5rem 0;
+            }
+
+            .table tbody td:before {
+                content: attr(data-label) ": ";
+                font-weight: 600;
+                color: var(--gray-700);
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-church me-2"></i>
-                Sistema de Gerenciamento
+                Cadastro IBNT
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -169,11 +520,12 @@
         </div>
     </nav>
 
-    <div class="container mt-4 mb-5">
+    <div class="container main-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'info' }} alert-dismissible fade show">
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category == 'error' else 'info-circle' }} me-2"></i>
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -181,60 +533,128 @@
             {% endif %}
         {% endwith %}
 
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="page-title">Lista de Membros</h1>
-            <a href="{{ url_for('cadastro') }}" class="btn btn-main">
+        <!-- Page Header -->
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="page-title">Membros</h1>
+                <p class="page-subtitle">Gerencie todos os membros da igreja</p>
+            </div>
+            <a href="{{ url_for('cadastro') }}" class="btn btn-primary">
                 <i class="fas fa-user-plus me-2"></i>Novo Membro
             </a>
         </div>
 
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" class="form-control search-input" placeholder="Pesquisar membros...">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar membros por nome, bairro ou estado civil...">
+            </div>
         </div>
 
+        <!-- Stats Row -->
+        {% if membros %}
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ membros|length }}</div>
+                <div class="stat-label">Total de Membros</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ membros|selectattr('Sexo', 'equalto', 'Masculino')|list|length }}</div>
+                <div class="stat-label">Homens</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ membros|selectattr('Sexo', 'equalto', 'Feminino')|list|length }}</div>
+                <div class="stat-label">Mulheres</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ membros|selectattr('Estado Civil', 'equalto', 'Casado(a)')|list|length }}</div>
+                <div class="stat-label">Casados</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Members Table -->
         <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-users me-2"></i>Lista de Membros
+                </h3>
+            </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped mb-0" id="membersTable">
-                        <thead class="bg-light">
+                    <table class="table" id="membersTable">
+                        <thead>
                             <tr>
-                                <th class="px-4 py-3">Nome</th>
-                                <th class="px-4 py-3">Sexo</th>
-                                <th class="px-4 py-3">Estado Civil</th>
-                                <th class="px-4 py-3">Bairro</th>
-                                <th class="px-4 py-3 text-center">Ações</th>
+                                <th>Membro</th>
+                                <th>Sexo</th>
+                                <th>Estado Civil</th>
+                                <th>Localização</th>
+                                <th class="text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% if membros %}
                                 {% for membro in membros %}
                                     <tr>
-                                        <td class="px-4 py-3">{{ membro['Nome'] }}</td>
-                                        <td class="px-4 py-3">{{ membro['Sexo'] }}</td>
-                                        <td class="px-4 py-3">{{ membro['Estado Civil'] }}</td>
-                                        <td class="px-4 py-3">{{ membro['Bairro'] }}</td>
-                                        <td class="px-4 py-3 text-center">
-                                            <a href="{{ url_for('visualizar_membro', indice=loop.index0) }}" class="action-btn" title="Visualizar">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ url_for('editar_membro', indice=loop.index0) }}" class="action-btn" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="#" class="action-btn delete" title="Excluir" onclick="confirmarExclusao({{ loop.index0 }})">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                        <td data-label="Membro">
+                                            <div class="member-name">{{ membro['Nome'] }}</div>
+                                            <div class="member-meta">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                {{ membro['Nascimento'] }}
+                                            </div>
+                                        </td>
+                                        <td data-label="Sexo">
+                                            <span class="status-badge badge-{{ 'male' if membro['Sexo'] == 'Masculino' else 'female' }}">
+                                                <i class="fas fa-{{ 'mars' if membro['Sexo'] == 'Masculino' else 'venus' }} me-1"></i>
+                                                {{ membro['Sexo'] }}
+                                            </span>
+                                        </td>
+                                        <td data-label="Estado Civil">{{ membro['Estado Civil'] }}</td>
+                                        <td data-label="Localização">
+                                            <div>
+                                                <i class="fas fa-map-marker-alt me-1 text-muted"></i>
+                                                {{ membro['Bairro'] }}
+                                            </div>
+                                            <div class="member-meta">
+                                                {{ membro['Rua'] }}, {{ membro['Número'] }}
+                                            </div>
+                                        </td>
+                                        <td data-label="Ações" class="text-center">
+                                            <div class="action-buttons">
+                                                <a href="{{ url_for('visualizar_membro', indice=loop.index0) }}" 
+                                                   class="action-btn view" 
+                                                   title="Visualizar detalhes">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ url_for('editar_membro', indice=loop.index0) }}" 
+                                                   class="action-btn edit" 
+                                                   title="Editar membro">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" 
+                                                   class="action-btn delete" 
+                                                   title="Excluir membro" 
+                                                   onclick="confirmarExclusao({{ loop.index0 }})">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
                             {% else %}
                                 <tr>
-                                    <td colspan="5" class="text-center py-4">
-                                        <i class="fas fa-users text-muted mb-3" style="font-size: 3rem;"></i>
-                                        <p class="mb-0">Nenhum membro cadastrado ainda.</p>
-                                        <a href="{{ url_for('cadastro') }}" class="btn btn-sm btn-outline-main mt-2">
-                                            <i class="fas fa-user-plus me-1"></i>Cadastrar Membro
-                                        </a>
+                                    <td colspan="5">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <h3 class="empty-state-title">Nenhum membro encontrado</h3>
+                                            <p class="empty-state-text">Comece cadastrando o primeiro membro da sua igreja.</p>
+                                            <a href="{{ url_for('cadastro') }}" class="btn btn-primary">
+                                                <i class="fas fa-user-plus me-2"></i>Cadastrar Primeiro Membro
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             {% endif %}
@@ -250,16 +670,27 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Confirmar Exclusão
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja excluir este membro? Esta ação não pode ser desfeita.
+                    <p class="mb-3">Tem certeza que deseja excluir este membro?</p>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Atenção:</strong> Esta ação não pode ser desfeita e todos os dados do membro serão perdidos permanentemente.
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form id="deleteForm" method="post">
-                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </button>
+                    <form id="deleteForm" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt me-1"></i>Excluir Membro
+                        </button>
                     </form>
                 </div>
             </div>
@@ -276,28 +707,72 @@
             deleteModal.show();
         }
         
-        // Funcionalidade de pesquisa
+        // Funcionalidade de pesquisa melhorada
         document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchValue = this.value.toLowerCase();
+            const searchValue = this.value.toLowerCase().trim();
             const table = document.getElementById('membersTable');
             const rows = table.getElementsByTagName('tr');
+            let visibleRows = 0;
             
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 const cells = row.getElementsByTagName('td');
                 let found = false;
                 
-                for (let j = 0; j < cells.length - 1; j++) {
-                    const cellText = cells[j].textContent || cells[j].innerText;
-                    
-                    if (cellText.toLowerCase().indexOf(searchValue) > -1) {
-                        found = true;
-                        break;
+                // Verificar se a linha não é a linha de "empty state"
+                if (cells.length > 1) {
+                    for (let j = 0; j < cells.length - 1; j++) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        
+                        if (cellText.toLowerCase().indexOf(searchValue) > -1) {
+                            found = true;
+                            break;
+                        }
                     }
+                    
+                    row.style.display = found ? '' : 'none';
+                    if (found) visibleRows++;
                 }
-                
-                row.style.display = found ? '' : 'none';
             }
+            
+            // Mostrar mensagem se nenhum resultado foi encontrado
+            const emptyMessage = document.getElementById('noResults');
+            if (emptyMessage) {
+                emptyMessage.remove();
+            }
+            
+            if (visibleRows === 0 && searchValue !== '') {
+                const tbody = table.querySelector('tbody');
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.id = 'noResults';
+                noResultsRow.innerHTML = `
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="empty-state-title">Nenhum resultado encontrado</h3>
+                            <p class="empty-state-text">Tente usar termos diferentes para sua pesquisa.</p>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(noResultsRow);
+            }
+        });
+
+        // Animação de entrada para as linhas da tabela
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#membersTable tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'all 0.3s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
         });
     </script>
 </body>

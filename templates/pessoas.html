@@ -6,159 +6,555 @@
     <title>Lista de Pessoas - Sistema de Gerenciamento da Igreja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-green: #2e7d32;
-            --light-green: #81c784;
-            --dark-green: #1b5e20;
-            --pale-green: #e8f5e9;
-            --accent-green: #4caf50;
-            --lighter-green: #c8e6c9;
-            --light-blue: #42a5f5;
-            --light-orange: #ffb74d;
+            --primary-green: #10b981;
+            --primary-green-light: #34d399;
+            --primary-green-dark: #059669;
+            --secondary-blue: #3b82f6;
+            --secondary-purple: #8b5cf6;
+            --secondary-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
         }
+
+        /* Navbar */
         .navbar {
-            background-color: var(--main-green);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .navbar-brand {
-            font-weight: 500;
-        }
-        .nav-link {
-            color: rgba(255,255,255,0.85) !important;
-            font-weight: 400;
-            padding: 0.75rem 1rem !important;
-            transition: all 0.2s;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: white !important;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 6px;
-        }
-        .card {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
         }
-        .card-header {
-            border-bottom: none;
-            padding: 1.2rem 1.5rem;
-            font-weight: 500;
-            color: white;
-            background-color: var(--main-green);
-        }
-        .btn-main {
-            background-color: var(--main-green);
-            border-color: var(--main-green);
-            color: white;
-        }
-        .btn-main:hover {
-            background-color: var(--dark-green);
-            border-color: var(--dark-green);
-            color: white;
-        }
-        .btn-outline-main {
-            border-color: var(--main-green);
-            color: var(--main-green);
-        }
-        .btn-outline-main:hover {
-            background-color: var(--main-green);
-            color: white;
-        }
-        .page-title {
+
+        .navbar-brand {
             font-weight: 600;
-            color: #333;
-            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--white) !important;
         }
-        .table th {
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 500;
-            color: #495057;
+            padding: 0.75rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin: 0 0.25rem;
         }
-        .table-hover tbody tr:hover {
-            background-color: var(--pale-green);
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--white) !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
-        .action-btn {
-            color: var(--main-green);
-            text-decoration: none;
-            margin-right: 10px;
+
+        /* Main Container */
+        .main-container {
+            padding: 2rem 0;
         }
-        .action-btn:hover {
-            color: var(--dark-green);
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
         }
-        .action-btn.delete {
-            color: #dc3545;
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
         }
-        .action-btn.delete:hover {
-            color: #b02a37;
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            font-weight: 400;
         }
-        .table-responsive {
-            border-radius: 12px;
-            overflow: hidden;
+
+        /* Search */
+        .search-section {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
         }
+
         .search-container {
             position: relative;
-            margin-bottom: 1.5rem;
         }
-        .search-container i {
+
+        .search-icon {
             position: absolute;
-            left: 12px;
-            top: 12px;
-            color: #6c757d;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            z-index: 10;
         }
+
         .search-input {
-            padding-left: 35px;
-            border-radius: 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            width: 100%;
         }
+
         .search-input:focus {
-            border-color: var(--light-green);
-            box-shadow: 0 0 0 0.25rem rgba(129, 199, 132, 0.25);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            outline: none;
         }
-        .badge-visitante {
-            background-color: var(--light-blue);
-            color: white;
+
+        /* Tabs */
+        .custom-tabs {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 0.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
         }
-        .badge-convertido {
-            background-color: var(--light-orange);
-            color: white;
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
         }
-        .tabs-container {
-            margin-bottom: 1.5rem;
+
+        .tab-button {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
         }
-        .nav-tabs {
-            border-bottom: 1px solid #dee2e6;
+
+        .tab-button.active {
+            background: var(--primary-green);
+            color: var(--white);
+            box-shadow: var(--shadow-sm);
         }
-        .nav-tabs .nav-link {
-            color: #495057 !important;
-            border: 1px solid transparent;
-            border-top-left-radius: .25rem;
-            border-top-right-radius: .25rem;
-            padding: 0.5rem 1rem;
-            margin-bottom: -1px;
+
+        .tab-button:hover:not(.active) {
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
-        .nav-tabs .nav-link.active {
-            color: var(--dark-green) !important;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
+
+        .tab-count {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .tab-button:not(.active) .tab-count {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-green-light));
+        }
+
+        .stat-card.blue::before {
+            background: linear-gradient(90deg, var(--secondary-blue), #60a5fa);
+        }
+
+        .stat-card.orange::before {
+            background: linear-gradient(90deg, var(--secondary-orange), #fbbf24);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-number.blue {
+            color: var(--secondary-blue);
+        }
+
+        .stat-number.orange {
+            color: var(--secondary-orange);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
             font-weight: 500;
         }
-        .nav-tabs .nav-link:hover {
-            border-color: #e9ecef #e9ecef #dee2e6;
-            color: var(--dark-green) !important;
-            background-color: rgba(0,0,0,0.02);
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        /* Table */
+        .table-responsive {
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            background-color: var(--gray-50);
+            border: none;
+            font-weight: 600;
+            color: var(--gray-700);
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody td {
+            border: none;
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Person Info */
+        .person-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .person-meta {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-visitante {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .badge-convertido {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--secondary-orange);
+        }
+
+        .badge-male {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .badge-female {
+            background: rgba(236, 72, 153, 0.1);
+            color: var(--accent-pink);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-200);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn.view {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .action-btn.view:hover {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .action-btn.edit {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .action-btn.edit:hover {
+            background: var(--secondary-blue);
+            color: var(--white);
+        }
+
+        .action-btn.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .action-btn.delete:hover {
+            background: #ef4444;
+            color: var(--white);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-green-dark);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: var(--border-radius-lg);
+            border: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--gray-200);
+            padding: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem 0;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .search-section {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table tbody tr {
+                display: block;
+                border: 1px solid var(--gray-200);
+                border-radius: var(--border-radius);
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+
+            .table tbody td {
+                display: block;
+                border: none;
+                padding: 0.5rem 0;
+            }
+
+            .table tbody td:before {
+                content: attr(data-label) ": ";
+                font-weight: 600;
+                color: var(--gray-700);
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-church me-2"></i>
-                Sistema de Gerenciamento
+                Cadastro IBNT
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -204,11 +600,12 @@
         </div>
     </nav>
 
-    <div class="container mt-4 mb-5">
+    <div class="container main-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'info' }} alert-dismissible fade show">
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category == 'error' else 'info-circle' }} me-2"></i>
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -216,137 +613,153 @@
             {% endif %}
         {% endwith %}
 
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="page-title">Lista de Pessoas</h1>
-            <a href="{{ url_for('cadastro_pessoa') }}" class="btn btn-main">
+        <!-- Page Header -->
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="page-title">Pessoas</h1>
+                <p class="page-subtitle">Acompanhe visitantes e novos convertidos</p>
+            </div>
+            <a href="{{ url_for('cadastro_pessoa') }}" class="btn btn-primary">
                 <i class="fas fa-user-plus me-2"></i>Nova Pessoa
             </a>
         </div>
 
-        <div class="tabs-container">
-            <ul class="nav nav-tabs" id="situacaoTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos" type="button" role="tab" aria-controls="todos" aria-selected="true">
-                        Todos <span class="badge bg-secondary ms-1" id="count-todos">0</span>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="visitantes-tab" data-bs-toggle="tab" data-bs-target="#visitantes" type="button" role="tab" aria-controls="visitantes" aria-selected="false">
-                        Visitantes <span class="badge bg-primary ms-1" id="count-visitantes">0</span>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="convertidos-tab" data-bs-toggle="tab" data-bs-target="#convertidos" type="button" role="tab" aria-controls="convertidos" aria-selected="false">
-                        Novos Convertidos <span class="badge bg-warning ms-1" id="count-convertidos">0</span>
-                    </button>
-                </li>
-            </ul>
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar pessoas por nome, situação ou localização...">
+            </div>
         </div>
 
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" class="form-control search-input" placeholder="Pesquisar pessoas...">
+        <!-- Stats Row -->
+        {% if pessoas %}
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ pessoas|length }}</div>
+                <div class="stat-label">Total de Pessoas</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-number blue">{{ pessoas|selectattr('Situação', 'equalto', 'Visitante')|list|length }}</div>
+                <div class="stat-label">Visitantes</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-number orange">{{ pessoas|selectattr('Situação', 'equalto', 'Novo Convertido')|list|length }}</div>
+                <div class="stat-label">Novos Convertidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ pessoas|selectattr('Sexo', 'equalto', 'Feminino')|list|length }}</div>
+                <div class="stat-label">Mulheres</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Custom Tabs -->
+        <div class="custom-tabs">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="todos" id="tab-todos">
+                    <i class="fas fa-users me-2"></i>
+                    Todos
+                    <span class="tab-count" id="count-todos">0</span>
+                </button>
+                <button class="tab-button" data-tab="visitantes" id="tab-visitantes">
+                    <i class="fas fa-user-check me-2"></i>
+                    Visitantes
+                    <span class="tab-count" id="count-visitantes">0</span>
+                </button>
+                <button class="tab-button" data-tab="convertidos" id="tab-convertidos">
+                    <i class="fas fa-pray me-2"></i>
+                    Novos Convertidos
+                    <span class="tab-count" id="count-convertidos">0</span>
+                </button>
+            </div>
         </div>
 
-        <div class="tab-content" id="situacaoTabsContent">
-            <div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped mb-0" id="todosTable">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="px-4 py-3">Nome</th>
-                                        <th class="px-4 py-3">Sexo</th>
-                                        <th class="px-4 py-3">Situação</th>
-                                        <th class="px-4 py-3">Data de Cadastro</th>
-                                        <th class="px-4 py-3 text-center">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% if pessoas %}
-                                        {% for pessoa in pessoas %}
-                                            <tr data-situacao="{{ pessoa['Situação'] }}">
-                                                <td class="px-4 py-3">{{ pessoa['Nome'] }}</td>
-                                                <td class="px-4 py-3">{{ pessoa['Sexo'] }}</td>
-                                                <td class="px-4 py-3">
-                                                    {% if pessoa['Situação'] == 'Visitante' %}
-                                                        <span class="badge badge-visitante">Visitante</span>
-                                                    {% elif pessoa['Situação'] == 'Novo Convertido' %}
-                                                        <span class="badge badge-convertido">Novo Convertido</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td class="px-4 py-3">{{ pessoa['Data de Cadastro'] }}</td>
-                                                <td class="px-4 py-3 text-center">
-                                                    <a href="{{ url_for('visualizar_pessoa', indice=loop.index0) }}" class="action-btn" title="Visualizar">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="{{ url_for('editar_pessoa', indice=loop.index0) }}" class="action-btn" title="Editar">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="#" class="action-btn delete" title="Excluir" onclick="confirmarExclusao({{ loop.index0 }})">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    {% else %}
-                                        <tr>
-                                            <td colspan="5" class="text-center py-4">
-                                                <i class="fas fa-user-friends text-muted mb-3" style="font-size: 3rem;"></i>
-                                                <p class="mb-0">Nenhuma pessoa cadastrada ainda.</p>
-                                                <a href="{{ url_for('cadastro_pessoa') }}" class="btn btn-sm btn-outline-main mt-2">
-                                                    <i class="fas fa-user-plus me-1"></i>Cadastrar Pessoa
+        <!-- People Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user-friends me-2"></i>Lista de Pessoas
+                </h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table" id="pessoasTable">
+                        <thead>
+                            <tr>
+                                <th>Pessoa</th>
+                                <th>Sexo</th>
+                                <th>Situação</th>
+                                <th>Data de Cadastro</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if pessoas %}
+                                {% for pessoa in pessoas %}
+                                    <tr data-situacao="{{ pessoa['Situação'] }}">
+                                        <td data-label="Pessoa">
+                                            <div class="person-name">{{ pessoa['Nome'] }}</div>
+                                            <div class="person-meta">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                {{ pessoa['Nascimento'] }}
+                                                <i class="fas fa-map-marker-alt ms-2 me-1"></i>
+                                                {{ pessoa['Bairro'] }}
+                                            </div>
+                                        </td>
+                                        <td data-label="Sexo">
+                                            <span class="status-badge badge-{{ 'male' if pessoa['Sexo'] == 'Masculino' else 'female' }}">
+                                                <i class="fas fa-{{ 'mars' if pessoa['Sexo'] == 'Masculino' else 'venus' }} me-1"></i>
+                                                {{ pessoa['Sexo'] }}
+                                            </span>
+                                        </td>
+                                        <td data-label="Situação">
+                                            <span class="status-badge badge-{{ 'visitante' if pessoa['Situação'] == 'Visitante' else 'convertido' }}">
+                                                <i class="fas fa-{{ 'door-open' if pessoa['Situação'] == 'Visitante' else 'pray' }} me-1"></i>
+                                                {{ pessoa['Situação'] }}
+                                            </span>
+                                        </td>
+                                        <td data-label="Data de Cadastro">{{ pessoa['Data de Cadastro'] }}</td>
+                                        <td data-label="Ações" class="text-center">
+                                            <div class="action-buttons">
+                                                <a href="{{ url_for('visualizar_pessoa', indice=loop.index0) }}" 
+                                                   class="action-btn view" 
+                                                   title="Visualizar detalhes">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="visitantes" role="tabpanel" aria-labelledby="visitantes-tab">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped mb-0" id="visitantesTable">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="px-4 py-3">Nome</th>
-                                        <th class="px-4 py-3">Sexo</th>
-                                        <th class="px-4 py-3">Data de Cadastro</th>
-                                        <th class="px-4 py-3 text-center">Ações</th>
+                                                <a href="{{ url_for('editar_pessoa', indice=loop.index0) }}" 
+                                                   class="action-btn edit" 
+                                                   title="Editar pessoa">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" 
+                                                   class="action-btn delete" 
+                                                   title="Excluir pessoa" 
+                                                   onclick="confirmarExclusao({{ loop.index0 }})">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Será preenchido via JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="convertidos" role="tabpanel" aria-labelledby="convertidos-tab">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped mb-0" id="convertidosTable">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="px-4 py-3">Nome</th>
-                                        <th class="px-4 py-3">Sexo</th>
-                                        <th class="px-4 py-3">Data de Cadastro</th>
-                                        <th class="px-4 py-3 text-center">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Será preenchido via JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">
+                                                <i class="fas fa-user-friends"></i>
+                                            </div>
+                                            <h3 class="empty-state-title">Nenhuma pessoa encontrada</h3>
+                                            <p class="empty-state-text">Comece cadastrando visitantes e novos convertidos.</p>
+                                            <a href="{{ url_for('cadastro_pessoa') }}" class="btn btn-primary">
+                                                <i class="fas fa-user-plus me-2"></i>Cadastrar Primeira Pessoa
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -357,16 +770,27 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Confirmar Exclusão
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja excluir esta pessoa? Esta ação não pode ser desfeita.
+                    <p class="mb-3">Tem certeza que deseja excluir esta pessoa?</p>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Atenção:</strong> Esta ação não pode ser desfeita e todos os dados da pessoa serão perdidos permanentemente.
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form id="deleteForm" method="post">
-                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </button>
+                    <form id="deleteForm" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="fas fa-trash-alt me-1"></i>Excluir Pessoa
+                        </button>
                     </form>
                 </div>
             </div>
@@ -375,7 +799,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Função para confirmar exclusão
+        let currentTab = 'todos';
+        let allRows = [];
+
         function confirmarExclusao(indice) {
             const deleteForm = document.getElementById('deleteForm');
             deleteForm.action = "{{ url_for('excluir_pessoa', indice=0) }}".replace('0', indice);
@@ -383,100 +809,155 @@
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
             deleteModal.show();
         }
-        
-        // Função para pesquisar nas tabelas
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchValue = this.value.toLowerCase();
-            const tables = ['todosTable', 'visitantesTable', 'convertidosTable'];
-            
-            tables.forEach(tableId => {
-                const table = document.getElementById(tableId);
-                if (table) {
-                    const rows = table.getElementsByTagName('tr');
-                    
-                    for (let i = 1; i < rows.length; i++) {
-                        const row = rows[i];
-                        const cells = row.getElementsByTagName('td');
-                        let found = false;
-                        
-                        for (let j = 0; j < cells.length - 1; j++) {
-                            const cellText = cells[j].textContent || cells[j].innerText;
-                            
-                            if (cellText.toLowerCase().indexOf(searchValue) > -1) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        
-                        row.style.display = found ? '' : 'none';
-                    }
-                }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
             });
-        });
-        
-        // Função para filtrar as tabelas por situação
-        function populateTables() {
-            const allRows = document.querySelectorAll('#todosTable tbody tr');
-            const visitantesTable = document.querySelector('#visitantesTable tbody');
-            const convertidosTable = document.querySelector('#convertidosTable tbody');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            // Filter table rows
+            const table = document.getElementById('pessoasTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr[data-situacao]'));
+
+            rows.forEach(row => {
+                const situacao = row.getAttribute('data-situacao');
+                let shouldShow = false;
+
+                switch(tabName) {
+                    case 'todos':
+                        shouldShow = true;
+                        break;
+                    case 'visitantes':
+                        shouldShow = situacao === 'Visitante';
+                        break;
+                    case 'convertidos':
+                        shouldShow = situacao === 'Novo Convertido';
+                        break;
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+            });
+
+            currentTab = tabName;
+            updateCounts();
+        }
+
+        function updateCounts() {
+            const allRows = document.querySelectorAll('#pessoasTable tbody tr[data-situacao]');
             
-            // Limpa as tabelas
-            visitantesTable.innerHTML = '';
-            convertidosTable.innerHTML = '';
-            
-            // Contadores
             let totalCount = 0;
             let visitantesCount = 0;
             let convertidosCount = 0;
-            
-            // Filtra e copia as linhas para as tabelas correspondentes
+
             allRows.forEach(row => {
-                if (row.cells.length > 1) { // Ignora a linha "Nenhuma pessoa cadastrada ainda"
-                    totalCount++;
-                    const situacao = row.getAttribute('data-situacao');
-                    
-                    if (situacao === 'Visitante') {
-                        visitantesCount++;
-                        const clone = row.cloneNode(true);
-                        visitantesTable.appendChild(clone);
-                    } else if (situacao === 'Novo Convertido') {
-                        convertidosCount++;
-                        const clone = row.cloneNode(true);
-                        convertidosTable.appendChild(clone);
-                    }
+                const situacao = row.getAttribute('data-situacao');
+                totalCount++;
+                
+                if (situacao === 'Visitante') {
+                    visitantesCount++;
+                } else if (situacao === 'Novo Convertido') {
+                    convertidosCount++;
                 }
             });
-            
-            // Atualiza os contadores nas abas
+
             document.getElementById('count-todos').textContent = totalCount;
             document.getElementById('count-visitantes').textContent = visitantesCount;
             document.getElementById('count-convertidos').textContent = convertidosCount;
-            
-            // Adiciona linhas "Nenhum resultado" se necessário
-            if (visitantesCount === 0) {
-                visitantesTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="text-center py-4">
-                            <p class="mb-0">Nenhum visitante cadastrado.</p>
-                        </td>
-                    </tr>
-                `;
-            }
-            
-            if (convertidosCount === 0) {
-                convertidosTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="text-center py-4">
-                            <p class="mb-0">Nenhum novo convertido cadastrado.</p>
-                        </td>
-                    </tr>
-                `;
-            }
         }
-        
-        // Inicializa as tabelas quando a página carrega
+
+        // Tab click handlers
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase().trim();
+            const table = document.getElementById('pessoasTable');
+            const rows = table.querySelectorAll('tbody tr[data-situacao]');
+            let visibleRows = 0;
+            
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length - 1; j++) {
+                    const cellText = cells[j].textContent || cells[j].innerText;
+                    
+                    if (cellText.toLowerCase().indexOf(searchValue) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                // Also check if row should be visible based on current tab
+                const situacao = row.getAttribute('data-situacao');
+                let tabMatch = false;
+                
+                switch(currentTab) {
+                    case 'todos':
+                        tabMatch = true;
+                        break;
+                    case 'visitantes':
+                        tabMatch = situacao === 'Visitante';
+                        break;
+                    case 'convertidos':
+                        tabMatch = situacao === 'Novo Convertido';
+                        break;
+                }
+                
+                const shouldShow = found && tabMatch;
+                row.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) visibleRows++;
+            });
+            
+            // Show no results message if needed
+            const existingMessage = document.getElementById('noResults');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            if (visibleRows === 0 && searchValue !== '') {
+                const tbody = table.querySelector('tbody');
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.id = 'noResults';
+                noResultsRow.innerHTML = `
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="empty-state-title">Nenhum resultado encontrado</h3>
+                            <p class="empty-state-text">Tente usar termos diferentes para sua pesquisa.</p>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(noResultsRow);
+            }
+        });
+
+        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            populateTables();
+            updateCounts();
+            
+            // Animation for table rows
+            const rows = document.querySelectorAll('#pessoasTable tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'all 0.3s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
         });
     </script>
 </body>
